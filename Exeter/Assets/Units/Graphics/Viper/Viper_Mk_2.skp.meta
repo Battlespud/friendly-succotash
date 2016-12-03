@@ -1,0 +1,118 @@
+fileFormatVersion: 2
+guid: 8a91eb90e665d6e4192a57b1bdfe3299
+timeCreated: 1479692008
+licenseType: Free
+SketchUpImporter:
+  generateBackFace: 0
+  mergeCoplanarFaces: 0
+  selectedNodes: 0000000001000000020000000300000004000000050000000600000007000000
+  assetHash:
+    serializedVersion: 2
+    Hash: fcf38b8f658d43e0681dccf99ccad11b
+  longitude: -105.283
+  latitude: 40.017
+  northCorrection: -0
+  fileUnit: 0
+  sketchUpImportData:
+    defaultCamera:
+      position: {x: -1.5310749, y: 2.3984046, z: -1.7416636}
+      lookAt: {x: 5.301605, y: 0.38156947, z: -4.8383164}
+      up: {x: 0.23647939, y: 0.9657075, z: -0.1071753}
+      fov: 35
+      aspectRatio: 0
+      orthoSize: 1
+      isPerspective: 1
+    scenes: []
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Cockpit Shield
+    100002: Component#16
+    100004: Component#18
+    100006: //RootNode
+    100008: Viper_Mk_2_MeshPart0
+    100010: Viper_Mk_2_MeshPart1
+    400000: Cockpit Shield
+    400002: Component#16
+    400004: Component#18
+    400006: //RootNode
+    400008: Viper_Mk_2_MeshPart0
+    400010: Viper_Mk_2_MeshPart1
+    2300000: Cockpit Shield
+    2300002: Component#16
+    2300004: Component#18
+    2300006: Viper_Mk_2_MeshPart0
+    2300008: Viper_Mk_2_MeshPart1
+    3300000: Cockpit Shield
+    3300002: Component#16
+    3300004: Component#18
+    3300006: Viper_Mk_2_MeshPart0
+    3300008: Viper_Mk_2_MeshPart1
+    4300000: Mesh Viper_Mk_2_MeshPart0
+    4300002: Mesh Viper_Mk_2_MeshPart1
+    4300004: Mesh Cockpit Shield
+    4300006: Mesh Component#16
+    4300008: Mesh Component#18
+  materials:
+    importMaterials: 1
+    materialName: 2
+    materialSearch: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.0254
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,26 @@
+﻿<Properties RefactoringSettings.EnableRefactorings="True" StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Units\PlayerControls.cs">
+    <Files>
+      <File FileName="Assets\Units\Fleets.cs" Line="30" Column="26" />
+      <File FileName="Assets\Units\Ships.cs" Line="1" Column="1" />
+      <File FileName="Assets\Units\PlayerControls.cs" Line="40" Column="32" />
+      <File FileName="Assets\Units\Sprites.cs" Line="1" Column="1" />
+      <File FileName="Assets\Lists.cs" Line="1" Column="1" />
+      <File FileName="Assets\NetworkPlayer.cs" Line="1" Column="1" />
+      <File FileName="Assets\TimeController.cs" Line="57" Column="23" />
+      <File FileName="Assets\Units\Economy\NonShipEntity.cs" Line="11" Column="28" />
+      <File FileName="Assets\Units\Planets.cs" Line="34" Column="25" />
+      <File FileName="Assets\Units\Graphics\OrbitAlphaController.cs" Line="33" Column="1" />
+      <File FileName="Assets\Units\Economy\NaturalResources.cs" Line="20" Column="103" />
+      <File FileName="Assets\Units\Economy\Facilities\Mines.cs" Line="16" Column="24" />
+      <File FileName="Assets\Units\Factions.cs" Line="11" Column="31" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="G:\Unity\ducking-octo-shame\Exeter\Assets\Units\Graphics\OrbitAlphaController.cs" line="13" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
