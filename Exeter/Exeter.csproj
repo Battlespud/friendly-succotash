@@ -177,8 +177,10 @@
     <Compile Include="Assets\Units\Economy\NaturalResources.cs" />
     <Compile Include="Assets\Units\Economy\NonShipEntity.cs" />
     <Compile Include="Assets\Units\Economy\Pops\POP.cs" />
+    <Compile Include="Assets\Units\Fleets and Ships\Components.cs" />
     <Compile Include="Assets\Units\Fleets and Ships\Fleets.cs" />
     <Compile Include="Assets\Units\Fleets and Ships\Missions.cs" />
+    <Compile Include="Assets\Units\Fleets and Ships\ShipClass.cs" />
     <Compile Include="Assets\Units\Fleets and Ships\ShipEvents.cs" />
     <Compile Include="Assets\Units\Fleets and Ships\Ships.cs" />
     <Compile Include="Assets\Units\Fleets and Ships\zoomToActiveFleet.cs" />

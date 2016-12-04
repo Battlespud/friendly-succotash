@@ -8,13 +8,17 @@ public class Fleets : NetworkBehaviour {
 
     /*All movement and actions are performed by fleets rather than individual ships.  Though a fleet can consist of a single ship of course.
 	Behaviors:
+
+        //LOLJK FUCK THAT THIS IS NOW THE CLASS FOR INDIVIDUAL SHIPS BECAUSE I SAY SO SHITLORDSSSSS
+        //it handles all the mechanics for the ships, but doesnt handle components or individual stats, these are imported from a ShipClass
+
 	Fleets move at the speed of their slowest member
 	They reduce speed instantly on taking damage or remove lagging ships depending on settings */
 
     //tbh this will likely become a ship class rather than fleets.  
 
 
-    //MISSION, EXPERIMENTAL
+    //MISSION, EXPERIMENTAL [it work nigga]
     void intializeMissionVariables()
     {
         PlanetsMissionList.Add(planetOneContainer);
@@ -119,6 +123,30 @@ public class Fleets : NetworkBehaviour {
         AssignedMission = Missions.MissionType.NONE;
         OnMission = false;
     }
+
+
+
+    //This where we put the actual ships stats and components 
+    //name of the ship, fluff
+    string name;
+    ShipClass shipClass;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
