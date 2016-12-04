@@ -87,14 +87,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\CharacterMenuManager.cs" />
-    <Compile Include="Assets\Characters.cs" />
-    <Compile Include="Assets\Clock.cs" />
-    <Compile Include="Assets\GravityAlpha.cs" />
-    <Compile Include="Assets\GravityAlphaController.cs" />
-    <Compile Include="Assets\GravityWell_Alpha_Controller.cs" />
-    <Compile Include="Assets\Lists.cs" />
-    <Compile Include="Assets\NetworkPlayer.cs" />
     <Compile Include="Assets\OrbitGeneric.cs" />
     <Compile Include="Assets\QuickBar.cs" />
     <Compile Include="Assets\ShowSkin.cs" />
@@ -188,7 +180,7 @@
     <Compile Include="Assets\Space Graphics Toolkit\Scripts\Player\SgtThrusterFlare.cs" />
     <Compile Include="Assets\Space Graphics Toolkit\Scripts\Player\SgtThrusterVisibility.cs" />
     <Compile Include="Assets\Space Graphics Toolkit\Scripts\Player\SgtWrappedStarfield.cs" />
-    <Compile Include="Assets\TimeController.cs" />
+    <Compile Include="Assets\Units\Characters\Characters.cs" />
     <Compile Include="Assets\Units\Economy\Facilities\ArmyAcademy.cs" />
     <Compile Include="Assets\Units\Economy\Facilities\Facilities.cs" />
     <Compile Include="Assets\Units\Economy\Facilities\FleetAcademy.cs" />
@@ -196,18 +188,23 @@
     <Compile Include="Assets\Units\Economy\FacilityCosts.cs" />
     <Compile Include="Assets\Units\Economy\NaturalResources.cs" />
     <Compile Include="Assets\Units\Economy\NonShipEntity.cs" />
-    <Compile Include="Assets\Units\Factions.cs" />
     <Compile Include="Assets\Units\Fleets and Ships\Fleets.cs" />
     <Compile Include="Assets\Units\Fleets and Ships\ShipEvents.cs" />
     <Compile Include="Assets\Units\Fleets and Ships\Ships.cs" />
-    <Compile Include="Assets\Units\Graphics\OrbitAlphaController.cs" />
+    <Compile Include="Assets\Units\Fleets and Ships\zoomToActiveFleet.cs" />
     <Compile Include="Assets\Units\Graphics\Space Engieners Test\RawMaterials.cs" />
-    <Compile Include="Assets\Units\Planets.cs" />
-    <Compile Include="Assets\Units\PlayerControls.cs" />
-    <Compile Include="Assets\Units\SampleResourceTemplate.cs" />
-    <Compile Include="Assets\Units\Sprites.cs" />
-    <Compile Include="Assets\timeDilationUI.cs" />
-    <Compile Include="Assets\zoomToActiveFleet.cs" />
+    <Compile Include="Assets\Units\Graphics\Sprites.cs" />
+    <Compile Include="Assets\Units\Planets and Asteroids\OrbitAlphaController.cs" />
+    <Compile Include="Assets\Units\Planets and Asteroids\Planets.cs" />
+    <Compile Include="Assets\Units\Planets and Asteroids\ResourceTemplates\SampleResourceTemplate.cs" />
+    <Compile Include="Assets\Units\System\Clock.cs" />
+    <Compile Include="Assets\Units\System\Factions.cs" />
+    <Compile Include="Assets\Units\System\Lists.cs" />
+    <Compile Include="Assets\Units\System\NetworkPlayer.cs" />
+    <Compile Include="Assets\Units\System\PlayerControls.cs" />
+    <Compile Include="Assets\Units\System\TimeController.cs" />
+    <Compile Include="Assets\Units\System\timeDilationUI.cs" />
+    <Compile Include="Assets\Units\UI\CharacterMenuManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Space Graphics Toolkit\Examples\Basic Pack\Shaders\SgtTerrainDebug.shader" />
