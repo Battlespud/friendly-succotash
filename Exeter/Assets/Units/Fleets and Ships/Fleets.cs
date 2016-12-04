@@ -6,17 +6,126 @@ using UnityEngine.Networking;
 public class Fleets : NetworkBehaviour {
 
 
-	/*All movement and actions are performed by fleets rather than individual ships.  Though a fleet can consist of a single ship of course.
+    /*All movement and actions are performed by fleets rather than individual ships.  Though a fleet can consist of a single ship of course.
 	Behaviors:
 	Fleets move at the speed of their slowest member
 	They reduce speed instantly on taking damage or remove lagging ships depending on settings */
 
-	//tbh this will likely become a ship class rather than fleets.  
+    //tbh this will likely become a ship class rather than fleets.  
+
+
+    //MISSION, EXPERIMENTAL
+    void intializeMissionVariables()
+    {
+        PlanetsMissionList.Add(planetOneContainer);
+        PlanetsMissionList.Add(planetTwoContainer);
+        PlanetsMissionList.Add(planetThreeContainer);
+        PlanetsMissionList.Add(planetFourContainer);
+
+        FleetsMissionList.Add(fleetOneContainer);
+        FleetsMissionList.Add(fleetTwoContainer);
+
+        noeMissionList.Add(noeOneContainer);
+        noeMissionList.Add(noeTwoContainer);
+    }
+
+    int missionStage = 0; //0 is no mission
+    
+   public int MissionStage
+    {
+        get
+        {
+            return missionStage;
+        }
+        set
+        {
+            missionStage = value;
+            Missions.CheckMission(AssignedMission, missionStage, this);
+        }
+    }
+
+    public Missions.MissionType AssignedMission = Missions.MissionType.NONE;
+
+    public void AssignMission(Missions.MissionType mis)
+    {
+        Debug.Log("Assigned mission!");
+        AssignedMission = mis;
+        missionStage = 1;
+        OnMission = true;
+    }
+    //Am i assigned a mission
+    bool OnMission = false;
+    //This stage consists of moving from one position to another, will advance stage when arrived
+    public bool missionInTransit = false;
+
+     bool targetIsPlanet = false;
+     Planets targetPlanet;
+
+    public void setTargetPlanet(Planets planet)
+    {
+        targetPlanet = planet;
+        targetIsPlanet = true;
+    }
+
+    public void unsetTargetPlanet()
+    {
+        targetPlanet = null;
+        targetIsPlanet = false;
+     }
+
+    public void MissionLoadItem()
+    {
+        // load an item
+        //TODO
+        Debug.Log("Loaded item!");
+        MissionStage = 3;
+    }
+
+    public void MissionUnloadItem()
+    {
+        // load an item
+        //TODO
+        Debug.Log("Unloaded item!");
+        MissionStage = 5;
+    }
+
+    //These are all used to store our variables over the mission stages
+
+    public float floatContainerOne;
+    public float floatContainerTwo;
+
+    public Planets planetOneContainer;
+    public Planets planetTwoContainer;
+    public Planets planetThreeContainer;
+    public Planets planetFourContainer;
+
+    public List<Planets> PlanetsMissionList = new List<Planets>();
+
+    public Fleets fleetOneContainer;
+    public Fleets fleetTwoContainer;
+
+    public List<Fleets> FleetsMissionList = new List<Fleets>();
+
+    public NonShipEntity noeOneContainer;
+    public NonShipEntity noeTwoContainer;
+
+    public List<NonShipEntity> noeMissionList = new List<NonShipEntity>();
+
+
+    public void endMission()
+    {
+        //null our all of the containers and stuff TODO
+        missionStage = 0;
+        AssignedMission = Missions.MissionType.NONE;
+        OnMission = false;
+    }
 
 
 
 	//Statics_________________________________________________________
     public Factions.FACTION Faction;
+    //reference ot the list in our lists container.  Only used for assigning, we should move this to the initializer later
+    List<Fleets> FleetsList;
 
 	public static Sprite fleetSprite;
 	ParticleSystem selectionEffect;
@@ -41,19 +150,23 @@ public class Fleets : NetworkBehaviour {
 		}
 	}
 
-
+    //order the ship where to go.  Assigning to TargetPosition does the same, but this is a bit neater
+    public void MoveTo(Vector3 targ)
+    {
+        TargetPosition = targ;
+    }
 
 
 	public void enableSprite(){
 		sr.enabled = true;
 		coll.size = collVecSprite; //resize collider to sprite
-		Debug.Log ("Sprites enabled");
+	//	Debug.Log ("Sprites enabled");
 	}
 
 	public void disableSprite(){
 		sr.enabled = false;
 		coll.size = collVecOrig;
-		Debug.Log ("Sprites Disabled");
+	//	Debug.Log ("Sprites Disabled");
 	}
 
 
@@ -202,7 +315,7 @@ public class Fleets : NetworkBehaviour {
 
 
 	void setMovementSpeed(){
-		float max = 10;
+		float max = 100;
 
 		foreach (Ships ship in FleetShips) {
 			if (ship.movementSpeed < max) { //lower max movement speed to whatever the slowest ships is
@@ -285,15 +398,31 @@ public class Fleets : NetworkBehaviour {
 	// Update is called once per frame
 	void Update() {
 
+
+
 		if (!localPlayerAuthority) {
 			return;
 		}
 
-		setMovementSpeed ();
-	
 
-		//rotates over time towards target
-		fleetGo.transform.rotation = Quaternion.Slerp (fleetGo.transform.rotation, targetRot, rotationSpeed*Time.deltaTime);
+        setMovementSpeed ();
+
+        //when we reach our targetposition, update the mission
+        //must be within the lower third of the gravity well.  We use this because the planet is constantly moving and alot ofthe time the ship cant make it to the exact point in a reasonable time
+        if (OnMission && Vector3.Distance(position, targetPosition) < targetPlanet.transform.localScale.x + targetPlanet.GravityWell.transform.localScale.x*(2/3) && missionInTransit)
+        {
+            Debug.Log("Reached mission waypoint");
+            MissionStage += 1;
+        }
+
+
+        if (targetIsPlanet)
+        {
+            TargetPosition = targetPlanet.GetPlanetPosition();
+        }
+
+        //rotates over time towards target
+        fleetGo.transform.rotation = Quaternion.Slerp (fleetGo.transform.rotation, targetRot, rotationSpeed*Time.deltaTime);
 		angularThrustEfficiency = 1f - (Quaternion.Angle (targetRot, fleetGo.transform.rotation)) / 180f;
 
 
@@ -305,7 +434,10 @@ public class Fleets : NetworkBehaviour {
 			DrawPath (position, targetPosition, Color.green, Time.deltaTime);
 		}
 
+
 	}
+
+   
 
 
 

@@ -256,8 +256,14 @@ public class PlayerControls : NetworkBehaviour {
 			checkFleetSprites ();
 		}
 
-		//Switch to perspective Camera
-		if (Input.GetKeyDown(KeyCode.P)) { 
+        //Assign test mission moving from Earth to Mars to selected fleet.  Will throw exception if no fleet selected, so dont be a fucking retard
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Missions.TransportMission(null, selectedFleets.LastOrDefault(), GameObject.FindGameObjectWithTag("Earth").GetComponent<Planets>(), GameObject.FindGameObjectWithTag("Mars").GetComponent<Planets>(), 1);
+        }
+
+        //Switch to perspective Camera
+        if (Input.GetKeyDown(KeyCode.P)) { 
 			LastCamTransform = cam.transform;
 			cam.orthographic = false;
 			float z = cam.orthographicSize * -2;
@@ -294,10 +300,10 @@ public class PlayerControls : NetworkBehaviour {
 
         //on left mouse button click, selection
         if (Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.A)) { 
-			Debug.Log("Attempting selection!");
+			//Debug.Log("Attempting selection!");
 			//dumb way without raycasts
 				foreach (Fleets fleet in FleetsList) {
-					Debug.Log ("Parsing Fleets");
+				//	Debug.Log ("Parsing Fleets");
 					if (fleet.localPlayerAuthority) {
 						Collider coll = fleet.fleetGo.GetComponent<Collider> ();
 						if (coll.bounds.Contains (new Vector3 (currFramePosition.x, currFramePosition.y, coll.transform.position.z))) {
@@ -306,7 +312,7 @@ public class PlayerControls : NetworkBehaviour {
 							Debug.Log (new Vector3 (currFramePosition.x, currFramePosition.y, coll.transform.position.z) + " does not match an owned fleet");
 						}
 					} else {
-						Debug.Log ("currently parsed fleet isnt owned by player, skipping");
+				//		Debug.Log ("currently parsed fleet isnt owned by player, skipping");
 					}
 				}
 
@@ -328,7 +334,7 @@ public class PlayerControls : NetworkBehaviour {
                 return;
             }
 			foreach (Fleets fleet in selectedFleets) {
-				fleet.TargetPosition = currFramePosition;
+				fleet.MoveTo(currFramePosition);
 			}
 		}
 

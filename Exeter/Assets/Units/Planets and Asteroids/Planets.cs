@@ -98,13 +98,17 @@ public class Planets : MonoBehaviour {
         planetOrbitAlphaController = planetGo.GetComponent<OrbitAlphaController>();
 	}
 
-
+    void getGravityWell()
+    {
+        GravityWell = planetGo.transform.FindChild("GravityWell").gameObject;
+    }
 
 	// Use this for initialization
 	void Start () {
 		planetGo = this.gameObject;
 		position = planetGo.transform.position;
 		getAlphaController ();
+        getGravityWell();
 	}
 
     private void Awake()
@@ -117,4 +121,10 @@ public class Planets : MonoBehaviour {
 		position = planetGo.transform.position;
         MineResources();
 	}
+
+    public Vector3 GetPlanetPosition()
+    {
+        return position;
+    }
+
 }
