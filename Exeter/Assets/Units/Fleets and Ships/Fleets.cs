@@ -16,7 +16,7 @@ public class Fleets : NetworkBehaviour {
 
 
 	//Statics_________________________________________________________
-	List<Fleets> FleetsList;
+    public Factions.FACTION Faction;
 
 	public static Sprite fleetSprite;
 	ParticleSystem selectionEffect;

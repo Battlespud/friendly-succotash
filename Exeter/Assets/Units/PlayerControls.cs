@@ -26,11 +26,16 @@ public class PlayerControls : NetworkBehaviour {
 
 	public Camera cam;
 
+    //The fleet list from the ListsController object
 	List<Fleets> FleetsList;
-	public List<Fleets> selectedFleets; 
+
+    //All currently selected fleets
+	public List<Fleets> selectedFleets;
+    //used to manage fleet selection and debug in Unity 
 	public Fleets[] selFleetArray; //debugging only
 
-	Sprites sprites;
+    //Our class used to store all the sprites we'll use
+    Sprites sprites;
 
 	NetworkPlayer netPlay;
 
@@ -49,7 +54,6 @@ public class PlayerControls : NetworkBehaviour {
 	const float forwards = 1;
 
 	Vector3 lastFramePosition;
-
 	Transform LastCamTransform;
 
 	struct eulerAngles{
@@ -78,6 +82,7 @@ public class PlayerControls : NetworkBehaviour {
 		cam.orthographicSize = orthoZoomOutLimit;
 		}
 
+    //sets up all of our variables
 	void fetchComponents(){
 		timeController = GameObject.FindGameObjectWithTag ("Time").GetComponent<TimeController>();
 		netPlay = GetComponentInParent<NetworkPlayer> ();
@@ -87,6 +92,7 @@ public class PlayerControls : NetworkBehaviour {
 
 			}
 
+    //center camera on the last selected fleet and zoom in
 	public void zoomToFleet(){
 		cam.transform.position = selectedFleets.LastOrDefault ().Position;
 		cam.orthographicSize = orthoZoomInLimit;
@@ -94,6 +100,7 @@ public class PlayerControls : NetworkBehaviour {
 		checkFleetSprites ();
 	}
 
+    //Decide whether to enable/disable sprites on each fleet based on camera zoom
 	void checkFleetSprites(){
 		switch (cam.orthographic){
 		case true:
