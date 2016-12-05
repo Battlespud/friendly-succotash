@@ -31,11 +31,13 @@ public class TimeController : NetworkBehaviour {
 
 	[Command]
 	public void CmdSlowDown(string id){
+		Debug.Log ("Slowed Down");
         TimescaleSelector--;
 	}
 
 	[Command]
 	public void CmdSpeedUp(string id){
+		Debug.Log ("Sped Up");
         TimescaleSelector++;
 	}
 
@@ -51,8 +53,11 @@ public class TimeController : NetworkBehaviour {
 	void Update () {
 		if(TimescaleSelector >= 9) { TimescaleSelector = 9;}
 		if (TimescaleSelector <= 0) {TimescaleSelector = 0;	}
-			TimescaleSelector = 0;
+
 			Time.timeScale = ValidTimescales[TimescaleSelector];
+		if (paused) {
+			Time.timeScale = 0f;
+		}
 		timeDilationString = Time.timeScale.ToString();
 		timeDilationText.text = timeDilationString;
 	}

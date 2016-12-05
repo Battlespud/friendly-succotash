@@ -31,6 +31,8 @@ public class PlayerControls : NetworkBehaviour {
 
     //All currently selected fleets
 	public List<Fleets> selectedFleets;
+	//All currently highlighted planets
+	public List<Planets> selectedPlanets;
     //used to manage fleet selection and debug in Unity 
 	public Fleets[] selFleetArray; //debugging only
 
@@ -262,6 +264,10 @@ public class PlayerControls : NetworkBehaviour {
             Missions.TransportMission(null, selectedFleets.LastOrDefault(), GameObject.FindGameObjectWithTag("Earth").GetComponent<Planets>(), GameObject.FindGameObjectWithTag("Mars").GetComponent<Planets>(), 1);
         }
 
+		if(Input.GetKeyDown(KeyCode.Semicolon)){
+			Missions.MoveToPlanetMission(selectedFleets.LastOrDefault(), selectedPlanets.LastOrDefault());
+		}
+
         //Switch to perspective Camera
         if (Input.GetKeyDown(KeyCode.P)) { 
 			LastCamTransform = cam.transform;
@@ -294,7 +300,16 @@ public class PlayerControls : NetworkBehaviour {
                     targ = hit.collider.gameObject.transform.parent.gameObject;
                 }
                 Debug.Log(targ.name);
-                targ.GetComponent<Planets>().checkOrbitSelection ();
+				Planets hitPlanet = targ.GetComponent<Planets> ();
+				hitPlanet.checkOrbitSelection ();
+				if(selectedPlanets.Contains(hitPlanet))
+					{
+						selectedPlanets.Remove(hitPlanet);
+					}
+					else
+					{
+						selectedPlanets.Add(hitPlanet);
+					}
 			}
 		}
 
@@ -319,8 +334,8 @@ public class PlayerControls : NetworkBehaviour {
 
 		}
 
-        //on left mouse button click + A key, movement
-        if (Input.GetMouseButtonDown (0) && Input.GetKey(KeyCode.A)) {
+        //on left mouse button click + V key, movement
+        if (Input.GetMouseButtonDown (0) && Input.GetKey(KeyCode.V)) {
             bool abort = false;
             foreach(Planets planet in Planets.PlanetList)
             {

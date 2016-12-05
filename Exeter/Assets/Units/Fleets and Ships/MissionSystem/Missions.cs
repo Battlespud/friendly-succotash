@@ -7,7 +7,52 @@ public static class Missions  {
     //a mission is multiple chained events in a certain sequence. They are used by AI ships primarily, but we should be able to automate player shipsthe same way tbh.
 
 
-        public enum MissionType { NONE, TRANSPORT};
+        public enum MissionType { NONE, TRANSPORT, MOVETOPLANET};
+
+
+	public static void CheckMission(MissionType mission, int stage, Fleets fleet)
+	{
+		Debug.Log("CheckMission() triggered");
+		switch (mission)
+		{
+		case MissionType.TRANSPORT:
+			HandleTransportMission(stage, fleet);
+			break;
+		
+		case MissionType.MOVETOPLANET:
+			HandleMoveToPlanetMission (stage, fleet);
+			break;
+
+		default:
+			break;
+		}
+
+		return;
+	}
+
+
+
+	public static void MoveToPlanetMission (Fleets fleet, Planets destination){
+		fleet.MoveTo (destination.gameObject.transform.position);
+		fleet.AssignMission (MissionType.MOVETOPLANET);
+		fleet.planetOneContainer = destination;
+		fleet.missionInTransit = true;
+		fleet.setTargetPlanet (destination);
+
+	}
+
+	public static void HandleMoveToPlanetMission(int stage, Fleets fleet){
+		if (stage == 2) {
+			Debug.Log ("Successfully moved to " + fleet.planetOneContainer.name);
+			fleet.endMission ();
+		} else {
+			Debug.Log ("Something has gone terribly wrong with MoveToPlanet Mission.");
+		}
+	}
+
+
+
+
 
 
     //TransportMission
@@ -62,21 +107,7 @@ public static class Missions  {
     }
 
 
-    public static void CheckMission(MissionType mission, int stage, Fleets fleet)
-    {
-        Debug.Log("CheckMission() triggered");
-        switch (mission)
-        {
-            case MissionType.TRANSPORT:
-                HandleTransportMission(stage, fleet);
-                    break;
-                
-            default:
-                    break;
-        }
 
-        return;
-    }
 
 
 

@@ -122,6 +122,9 @@ public class Fleets : NetworkBehaviour {
         missionStage = 0;
         AssignedMission = Missions.MissionType.NONE;
         OnMission = false;
+		targetIsPlanet = false;
+		targetPlanet = null;
+		missionInTransit = false;
     }
 
 
@@ -440,7 +443,7 @@ public class Fleets : NetworkBehaviour {
 
         //when we reach our targetposition, update the mission
         //must be within the lower third of the gravity well.  We use this because the planet is constantly moving and alot ofthe time the ship cant make it to the exact point in a reasonable time
-        if (OnMission && Vector3.Distance(position, targetPosition) < targetPlanet.transform.localScale.x + targetPlanet.GravityWell.transform.localScale.x*(2/3) && missionInTransit)
+        if (OnMission && Vector3.Distance(position, targetPosition) < targetPlanet.transform.localScale.x + targetPlanet.GravityWell.transform.localScale.x*(1/3) && missionInTransit)
         {
             Debug.Log("Reached mission waypoint");
             MissionStage += 1;
