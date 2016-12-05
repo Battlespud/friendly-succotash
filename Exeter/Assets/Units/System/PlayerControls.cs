@@ -43,8 +43,8 @@ public class PlayerControls : NetworkBehaviour {
 
 	//these are used to control camera zoom levels
 	const int perspZoomInLimit = 100; //minimum distance from plane
-	const int perspZoomOutLimit = 5000; //max distance from plane
-	const int perspZoomSpeed = 5000;
+	const int perspZoomOutLimit = 10000; //max distance from plane
+	const int perspZoomSpeed = 10000;
 
 	const int orthoZoomInLimit = 5; //smallest size
 	const int orthoZoomOutLimit = 5000; //max size of orthographic view, bigger is much more intensive
@@ -324,7 +324,7 @@ public class PlayerControls : NetworkBehaviour {
 						if (coll.bounds.Contains (new Vector3 (currFramePosition.x, currFramePosition.y, coll.transform.position.z))) {
 							changeSelection (fleet);
 						} else {
-							Debug.Log (new Vector3 (currFramePosition.x, currFramePosition.y, coll.transform.position.z) + " does not match an owned fleet");
+							//Debug.Log (new Vector3 (currFramePosition.x, currFramePosition.y, coll.transform.position.z) + " does not match an owned fleet");
 						}
 					} else {
 				//		Debug.Log ("currently parsed fleet isnt owned by player, skipping");

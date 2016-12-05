@@ -355,7 +355,7 @@ public class Fleets : NetworkBehaviour {
 
 
 	void setMovementSpeed(){
-		float max = 100;
+		float max = 1000;
 
 		foreach (Ships ship in FleetShips) {
 			if (ship.movementSpeed < max) { //lower max movement speed to whatever the slowest ships is
@@ -453,7 +453,14 @@ public class Fleets : NetworkBehaviour {
 			
 			if (targetIsPlanet) {
 				TargetPosition = targetPlanet.GetPlanetPosition();
-				if (Vector3.Distance (this.position, targetPlanet.GetPlanetPosition ()) < (targetPlanet.GravityWell.transform.localScale.x * targetPlanet.transform.localScale.x * .75) && missionInTransit) {
+				float orbitalDistance = targetPlanet.gameObject.transform.localScale.x;
+				if(targetPlanet.gameObject.transform.parent.parent.name == "Earth"){
+					orbitalDistance *= 6f;
+				}
+				if(targetPlanet.transform.parent.parent.name == "Mars"){
+					orbitalDistance *=1.8f;
+				}
+				if (Vector3.Distance (this.position, targetPlanet.GetPlanetPosition ()) < (targetPlanet.GravityWell.transform.localScale.x * orbitalDistance *.9) && missionInTransit) {
 					Debug.Log ("Reached mission waypoint");
 					MissionStage += 1;
 				}
