@@ -129,7 +129,10 @@ public class Fleets : NetworkBehaviour {
     //This where we put the actual ships stats and components 
     //name of the ship, fluff
     string name;
+    //this individual shipclass
     ShipClass shipClass;
+    //pointer to the generic ShipClass object
+    ShipClass parentShipClass;
 
 
 

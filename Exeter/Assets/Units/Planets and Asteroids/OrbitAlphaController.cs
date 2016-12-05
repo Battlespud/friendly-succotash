@@ -11,14 +11,6 @@ public class OrbitAlphaController : MonoBehaviour {
     //All this does is make the orbital path and gravity well transparent
     //Planet should have an orbital path as a sibling and a gravity well as a child for this to work, any other configuration is not supported at the moment.
 
-    //Place this on a planet gameobject
-    
-
-//deprecated
-    public enum ControllerType { GRAVITYWELL, ORBITALPATH };
-    public ControllerType controllerType;
-
-
 	//Gameobject of the planet this path is for.
 	GameObject planetGo;
     //Specific objects, only saved here for future use and testing.  Use the arrays to process changes

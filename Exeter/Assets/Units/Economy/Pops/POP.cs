@@ -36,7 +36,7 @@ public class POP : NonShipEntity {
     //How much work this pop does
     public float laborOutput; //optimal at 1
     //How happy the pop is with their life
-    public float satisfaction;
+    public float satisfaction =  .85f;
     //pop is rebelling
     public bool riot = false;
 

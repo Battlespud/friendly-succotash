@@ -56,13 +56,11 @@ public class Planets : MonoBehaviour {
 	 void selectOrbit(){
 		orbitSelected = true;
         planetOrbitAlphaController.VisiblePercent = OrbitAlphaController.selectedVisibility;
-
 	}
 
 	 void unselectOrbit(){
 		orbitSelected = false;
         planetOrbitAlphaController.VisiblePercent = OrbitAlphaController.regularVisibility;
-
     }
 
 	public void checkOrbitSelection(){
