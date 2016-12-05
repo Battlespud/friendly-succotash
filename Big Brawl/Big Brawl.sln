@@ -1,0 +1,35 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{3A9FACF1-33ED-8226-BD6C-970650AC4265}") = "Big Brawl", "Assembly-CSharp-firstpass.csproj", "{95784C54-2DED-A00C-49C5-2E636E2CFC3E}"
+EndProject
+Project("{3A9FACF1-33ED-8226-BD6C-970650AC4265}") = "Big Brawl", "Assembly-CSharp.csproj", "{A44F59B9-693A-374E-E37C-DF7420AE3172}"
+EndProject
+Project("{3A9FACF1-33ED-8226-BD6C-970650AC4265}") = "Big Brawl", "Assembly-CSharp-Editor-firstpass.csproj", "{0F9B83D9-1A2F-49A0-304E-4203A5CD868F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{95784C54-2DED-A00C-49C5-2E636E2CFC3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95784C54-2DED-A00C-49C5-2E636E2CFC3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95784C54-2DED-A00C-49C5-2E636E2CFC3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95784C54-2DED-A00C-49C5-2E636E2CFC3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A44F59B9-693A-374E-E37C-DF7420AE3172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A44F59B9-693A-374E-E37C-DF7420AE3172}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A44F59B9-693A-374E-E37C-DF7420AE3172}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A44F59B9-693A-374E-E37C-DF7420AE3172}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F9B83D9-1A2F-49A0-304E-4203A5CD868F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F9B83D9-1A2F-49A0-304E-4203A5CD868F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F9B83D9-1A2F-49A0-304E-4203A5CD868F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F9B83D9-1A2F-49A0-304E-4203A5CD868F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
