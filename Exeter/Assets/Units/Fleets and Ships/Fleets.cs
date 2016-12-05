@@ -118,6 +118,9 @@ public class Fleets : NetworkBehaviour {
 
     public void endMission()
     {
+		TargetPosition = position;
+		orbiting = true;
+		fleetGo.transform.SetParent(targetPlanet.GravityWell.transform);
         //null our all of the containers and stuff TODO
         missionStage = 0;
         AssignedMission = Missions.MissionType.NONE;
@@ -125,7 +128,6 @@ public class Fleets : NetworkBehaviour {
 		targetIsPlanet = false;
 		targetPlanet = null;
 		missionInTransit = false;
-		TargetPosition = position;
     }
 
 
@@ -174,6 +176,7 @@ public class Fleets : NetworkBehaviour {
 	float rotationSpeed = .2f;
 
 	bool setGlow;
+	bool orbiting = false;
 
 	public bool SetGlow { //enable or disable the glow effect 
 		get {
@@ -311,6 +314,8 @@ public class Fleets : NetworkBehaviour {
 			return targetPosition;
 		}
 		set {
+			orbiting = false;
+			fleetGo.transform.SetParent (null);
 			targetPosition = value;
 			if (targetPosition != null) {
 				//Point at the target location to maximize angular thrust
@@ -464,6 +469,10 @@ public class Fleets : NetworkBehaviour {
 
 
 		processMovement ();
+		if (orbiting) {
+			position = fleetGo.transform.position;
+			targetPosition = position;
+		}
 		fleetGo.transform.position = position;
 
 		//Draw a waypoint line to current target location
