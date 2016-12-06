@@ -176,12 +176,7 @@ public static class PlayerControlsEvents  {
 		return ray.GetPoint(distance);
 	}
 
-	/*
-	public static void SetFramePosition(Camera cam, Vector3 lastFramePosition){
-		lastFramePosition = GetWorldPositionOnPlane(cam);
-		lastFramePosition.z = 0;
-	}
-*/
+
 	public static Vector3 GetFramePosition(Camera cam){
 		Vector3 position;
 		position = GetWorldPositionOnPlane(cam);
