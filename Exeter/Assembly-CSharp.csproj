@@ -161,9 +161,11 @@
      <Compile Include="Assets\Units\Planets and Asteroids\ResourceTemplates\SampleResourceTemplate.cs" />
      <Compile Include="Assets\Units\System\Clock.cs" />
      <Compile Include="Assets\Units\System\Factions.cs" />
+     <Compile Include="Assets\Units\System\GarbageMan.cs" />
      <Compile Include="Assets\Units\System\Lists.cs" />
      <Compile Include="Assets\Units\System\NetworkPlayer.cs" />
      <Compile Include="Assets\Units\System\PlayerControls.cs" />
+     <Compile Include="Assets\Units\System\PlayerControlsEvents.cs" />
      <Compile Include="Assets\Units\System\TimeController.cs" />
      <Compile Include="Assets\Units\UI\CharacterMenuManager.cs" />
      <Compile Include="Assets\Units\UI\timeDilationUI.cs" />

@@ -7,6 +7,63 @@ using System;
 
 public class PlayerControls : NetworkBehaviour {
 
+	public Vector3 lastFramePosition;
+
+	//KEYBINDS
+
+	bool LeftClick(){
+		return Input.GetMouseButton (0);
+	}
+
+	bool RightClick(){
+		return Input.GetMouseButton (1);
+	}
+
+	bool MiddleClick(){
+		return Input.GetMouseButton (2);
+	}
+
+		//wasd
+	const KeyCode Up =  KeyCode.W;
+	const KeyCode Down = KeyCode.S;
+	const KeyCode Left = KeyCode.A;
+	const KeyCode Right = KeyCode.D;
+
+	bool GoUp(){
+		return Input.GetKey (Up);
+	}
+	bool GoDown(){
+		return Input.GetKey (Down);
+	}
+	bool GoLeft(){
+		return Input.GetKey (Left);
+	}
+	bool GoRight(){
+		return Input.GetKey (Right);
+	}
+
+
+	const KeyCode SpeedUp = KeyCode.Equals;
+	const KeyCode SlowDown = KeyCode.Minus;
+	const KeyCode Pause = KeyCode.Pause;
+
+
+	bool SpawnFleet()
+	{
+		return Input.GetKeyDown(SpawnFleetKey);
+	}
+	const KeyCode SpawnFleetKey = KeyCode.F;
+
+
+	bool SelectPlanet(){
+		return		Input.GetKeyDown (SelectPlanetKey);
+	}
+	const KeyCode SelectPlanetKey = KeyCode.G;
+
+
+
+
+
 
 	//use for locking regular controls while in menus
 	bool controlsDisabled = false;
@@ -41,21 +98,13 @@ public class PlayerControls : NetworkBehaviour {
 
 	NetworkPlayer netPlay;
 
-	//these are used to control camera zoom levels
-	const int perspZoomInLimit = 100; //minimum distance from plane
-	const int perspZoomOutLimit = 10000; //max distance from plane
-	const int perspZoomSpeed = 10000;
 
-	const int orthoZoomInLimit = 5; //smallest size
-	const int orthoZoomOutLimit = 5000; //max size of orthographic view, bigger is much more intensive
-	const int orthoZoomSpeed = 1500; //multiplier for mouse input
 
 	//How quickly the wasd buttons will move the camera
 	const float wasdScrollSpeed = 7.5f; 
 	const float backwards = -1;
 	const float forwards = 1;
 
-	Vector3 lastFramePosition;
 	Transform LastCamTransform;
 
 	struct eulerAngles{
@@ -80,8 +129,8 @@ public class PlayerControls : NetworkBehaviour {
 	// Use this for initialization
 	void Start () {
 		fetchComponents ();
-		checkFleetSprites ();
-		cam.orthographicSize = orthoZoomOutLimit;
+		PlayerControlsEvents.CheckFleetSprites (cam, FleetsList);
+		PlayerControlsEvents.ZoomOutMax (cam);
 		}
 
     //sets up all of our variables
@@ -96,42 +145,11 @@ public class PlayerControls : NetworkBehaviour {
 
     //center camera on the last selected fleet and zoom in
 	public void zoomToFleet(){
-		cam.transform.position = selectedFleets.LastOrDefault ().Position;
-		cam.orthographicSize = orthoZoomInLimit;
-		restoreCameraDistance ();
-		checkFleetSprites ();
+		PlayerControlsEvents.MoveCameraTo(cam, selectedFleets.LastOrDefault ().Position);
+		PlayerControlsEvents.ZoomInMax (cam);
 	}
 
     //Decide whether to enable/disable sprites on each fleet based on camera zoom
-	void checkFleetSprites(){
-		switch (cam.orthographic){
-		case true:
-			if (cam.orthographicSize > 499) {
-				foreach (Fleets fl in FleetsList) {
-					fl.enableSprite ();
-				}
-			} else {
-				foreach (Fleets fl in FleetsList) {
-				
-					fl.disableSprite ();
-				}
-			}
-			break;
-	
-		case false:
-			if (cam.transform.position.z < -250) {
-				foreach (Fleets fl in FleetsList) {
-					fl.enableSprite ();
-				}
-			} else {
-				foreach (Fleets fl in FleetsList) {
-
-					fl.disableSprite ();
-				}
-			}
-			break;
-	}
-	}
 
 	// Update is called once per frame
 	void Update () {
@@ -141,83 +159,48 @@ public class PlayerControls : NetworkBehaviour {
 			return;
 		}
 
+
+
+		Vector3 currFramePosition = new Vector3();
+		currFramePosition = PlayerControlsEvents.GetFramePosition (cam);
+
+
 		//set current frame positions
 		//poll where the mouse is at the start of each frame and store it
-		Vector3 currFramePosition = GetWorldPositionOnPlane();  
-		//always keep the mouse 1 layer closer to the camera than our highest layer in order to keep it visible.
 		//be very careful changing this as it can break selection
-		currFramePosition.z = 0; 
 		Vector3 diff = new Vector3(0,0,0);  //storage container for the difference between where we were and where we moved the mouse to.
 
 		// Handle screen dragging
-		if( Input.GetMouseButton(1) ) {	// Right
-			//determine difference in each vector component
-				diff = lastFramePosition - currFramePosition; 
-			//prevent dragging along the z layer by accident.  Prevents major glitches, do not alter
-				diff.z = 0; 
-			//move the camera the same amount our mouse moved
-				cam.transform.Translate (diff); 
+		if(RightClick()) {	// Right
+			diff = PlayerControlsEvents.Dragging(cam, lastFramePosition,currFramePosition);
 		}
 
 		//WASD Scrolling
 		//TODO add zoom ratio speed effect
-		if (Input.GetKey(KeyCode.W)) {
-			diff.y = wasdScrollSpeed*forwards;
-			cam.transform.transform.Translate(diff);
+		if (GoUp()) {
+			diff.y += wasdScrollSpeed*forwards;
 		}		
-		if (Input.GetKey(KeyCode.A)&& !Input.GetMouseButton(0)) { 
-			diff.x = wasdScrollSpeed*backwards;
-			cam.transform.transform.Translate(diff);
+		if (GoLeft()) { 
+			diff.x += wasdScrollSpeed*backwards;
 		}		
-		if (Input.GetKey(KeyCode.S)) { 
-			diff.y = wasdScrollSpeed*backwards;
-			cam.transform.transform.Translate(diff);
+		if (GoDown()) { 
+			diff.y += wasdScrollSpeed*backwards;
 		}		
-		if (Input.GetKey(KeyCode.D)) { 
-			diff.x = wasdScrollSpeed*forwards;
-			cam.transform.transform.Translate(diff);
+		if (GoRight()) { 
+			diff.x += wasdScrollSpeed*forwards;
 		}
 
 
-		if( Input.GetMouseButton(2) ) {	// Middle Click
-			Debug.Log("Attempting rotation");
+		if(MiddleClick()) {	// Middle Click
 			switch (cam.orthographic) {
-
 			case true:
 				//orthographic cam cant rotate
 				break;
-
 			case false:
 				{
 					//determine difference in each vector component
 					diff = lastFramePosition - currFramePosition; 
-					//enabling enabling float x will allow for horizontal rotation, but causes issues with z axis as well.
-					//TODO fix z axis problems to enable x rotation
-					float x = 0f; // diff.x;
-					float y = diff.y * -1;
-					float z = 0f;
-
-					Quaternion testternion = cam.transform.rotation;
-					Vector3 mappedDiff = new Vector3 (y, x, 0f);
-					GameObject testObject = new GameObject();
-					testObject.transform.position = cam.transform.position;
-					testObject.transform.rotation = cam.transform.rotation;
-					testObject.transform.Rotate (mappedDiff * (Time.deltaTime * 3.5f));
-					testternion = testObject.transform.rotation;
-					//Destroy (testObject);
-
-
-					Debug.Log(testObject.transform.rotation.x);
-					if (testternion.eulerAngles.x > 59 && testternion.eulerAngles.x < 300) {
-						Debug.Log ("Rotation will break! Aborting!");
-						Destroy (testObject);
-						return;
-					}
-
-					Destroy (testObject);
-
-					cam.transform.Rotate (mappedDiff*(Time.deltaTime*3.5f));
-					//cam.transform.rotation = Quaternion.AngleAxis(cam.transform.rotation.x + (Time.deltaTime*mappedDiff.x), Vector3.right);
+					PlayerControlsEvents.RotateCamera (cam, diff);
 					break;
 				}
 			}
@@ -225,37 +208,14 @@ public class PlayerControls : NetworkBehaviour {
 
 
 		//Handle Camera Zooming via scroll wheel
-		if( Input.GetAxis ("Mouse ScrollWheel") != 0f ) {	// zoom function.  Works, but requires a switch to perspective camera and changes to other parts of the script to compoensate.
-			switch (cam.orthographic) { //different camera modes handle zooming differently.  Perspective actually moves the camera, while ortho changes the canvas size to simulate it
-			case true:
-				{	
-					float f = cam.orthographicSize - Input.GetAxis ("Mouse ScrollWheel")*orthoZoomSpeed;
-					if (f > orthoZoomInLimit && f < orthoZoomOutLimit) {//how close you can zoom in or how far y ou can zoom out
-						cam.orthographicSize = f;
-					}
-					//Check if we need to enable or disable the fleet sprites based on zoom range
-					checkFleetSprites ();
-					break;
-				}
-			case false:
-				{
-					diff.z = Input.GetAxis ("Mouse ScrollWheel") * perspZoomSpeed*Time.deltaTime;
-					if ((diff.z < 0 && cam.transform.position.z > perspZoomOutLimit * -1) || (diff.z > 0 && cam.transform.position.z < perspZoomInLimit * -1)) {
-						cam.transform.Translate (diff);
-					}
-					checkFleetSprites ();
-					break;
-				}
+		if( Input.GetAxis ("Mouse ScrollWheel") != 0f ) {
+			PlayerControlsEvents.Zoom(cam, diff);
 
-			}
-		} //end of zooming
-
+		} 
 
 		//Spawn fleet for testing
-		if (Input.GetKeyDown(KeyCode.F)) { 
-			Debug.Log (currFramePosition);
+		if (SpawnFleet()) { 
 			Instantiate (sprites.FleetPrefab, currFramePosition, Quaternion.identity);
-			checkFleetSprites ();
 		}
 
         //Assign test mission moving from Earth to Mars to selected fleet.  Will throw exception if no fleet selected, so dont be a fucking retard
@@ -285,36 +245,12 @@ public class PlayerControls : NetworkBehaviour {
 		}
 
 		//Trigger planet selection to test orbit alpha
-		if (Input.GetKeyDown(KeyCode.G)) { 
-			Ray ray;
-			RaycastHit hit;
-			 ray = cam.ScreenPointToRay (Input.mousePosition);
-			if (Physics.Raycast (ray, out hit)) {
-                GameObject targ;
-                if (hit.collider.name != "GravityWell")
-                {
-                    targ = hit.collider.gameObject;
-                }
-                else
-                {
-                    targ = hit.collider.gameObject.transform.parent.gameObject;
-                }
-                Debug.Log(targ.name);
-				Planets hitPlanet = targ.GetComponent<Planets> ();
-				hitPlanet.checkOrbitSelection ();
-				if(selectedPlanets.Contains(hitPlanet))
-					{
-						selectedPlanets.Remove(hitPlanet);
-					}
-					else
-					{
-						selectedPlanets.Add(hitPlanet);
-					}
-			}
+		if (SelectPlanet()) { 
+			PlayerControlsEvents.SelectPlanet (cam, selectedPlanets);
 		}
 
         //on left mouse button click, selection
-        if (Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.A)) { 
+		if (Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.V)) { 
 			//Debug.Log("Attempting selection!");
 			//dumb way without raycasts
 				foreach (Fleets fleet in FleetsList) {
@@ -339,9 +275,10 @@ public class PlayerControls : NetworkBehaviour {
             bool abort = false;
             foreach(Planets planet in Planets.PlanetList)
             {
-                if (planet.gameObject.GetComponent<Collider>().bounds.Contains(currFramePosition))
+				if (planet.gameObject.GetComponent<Collider>().bounds.Contains(currFramePosition) || planet.GravityWell.gameObject.GetComponent<Collider>().bounds.Contains(currFramePosition))
                 {
-                    abort = true;
+					Missions.MoveToPlanetMission (selectedFleets, planet);
+                    //abort = true;
                 }
             }
             if (abort)
@@ -356,34 +293,29 @@ public class PlayerControls : NetworkBehaviour {
 
 
 		//Timescale stuff_______________________________________________________
-		if (Input.GetKeyDown(KeyCode.Equals)) { //on left mouse button click
+		if (Input.GetKeyDown(SpeedUp)) { //on left mouse button click
 			timeController.CmdSpeedUp(netPlay.playerID);
 		}
 
-		if (Input.GetKeyDown(KeyCode.Minus)) { //on left mouse button click
+		if (Input.GetKeyDown(SlowDown)) { //on left mouse button click
 			timeController.CmdSlowDown(netPlay.playerID);
 		}
 
-		if (Input.GetKeyDown(KeyCode.Space)) { //on left mouse button click
+		if (Input.GetKeyDown(Pause)) { //on left mouse button click
 			timeController.CmdPause(netPlay.playerID);
 		}
-
-
-
 		//______________________________________________________________________
 
-		//TODO add wasd scrolling
-
-		//grab and save the current mouse position to use as a reference for next frame.
-		lastFramePosition = GetWorldPositionOnPlane();
-		lastFramePosition.z = 0;
-
-
-		selFleetArray = selectedFleets.ToArray (); //only for debugging purposes~
-
-
-
+		PlayerControlsEvents.MoveCamera (cam, diff);
+		lastFramePosition = currFramePosition;
+		//updates our sprites as neccessary
+		InvokeRepeating ("InvokeSpriteCheck", 1, 1);
 	} //end of update
+
+
+	void InvokeSpriteCheck(){
+		PlayerControlsEvents.CheckFleetSprites (cam, FleetsList);
+	}
 
 	void changeSelection(Fleets fleet){
 		if(selectedFleets.Contains(fleet)){
@@ -398,20 +330,10 @@ public class PlayerControls : NetworkBehaviour {
 			}
 	}
 
-	void restoreCameraDistance(){
-		cam.transform.position = new Vector3(cam.transform.position.x,cam.transform.position.y, -50);
-		Debug.Log ("Restoring camera Z: " + cam.transform.position.z);
-	}
 
 
-	public Vector3 GetWorldPositionOnPlane() {
-		float z = 0;
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		Plane xy = new Plane(Vector3.forward, new Vector3(0, 0, z));
-		float distance;
-		xy.Raycast(ray, out distance);
-		return ray.GetPoint(distance);
-	}
+
+
 
 
 

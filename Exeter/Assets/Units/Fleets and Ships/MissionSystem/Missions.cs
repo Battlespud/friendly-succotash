@@ -41,6 +41,26 @@ public static class Missions  {
 
 	}
 
+	public static void MoveToPlanetMission (Fleets[] fleets, Planets destination){
+		foreach (Fleets fleet in fleets) {
+			fleet.MoveTo (destination.gameObject.transform.position);
+			fleet.AssignMission (MissionType.MOVETOPLANET);
+			fleet.planetOneContainer = destination;
+			fleet.missionInTransit = true;
+			fleet.setTargetPlanet (destination);
+		}
+	}
+
+	public static void MoveToPlanetMission (List<Fleets> fleets, Planets destination){
+		foreach (Fleets fleet in fleets) {
+			fleet.MoveTo (destination.gameObject.transform.position);
+			fleet.AssignMission (MissionType.MOVETOPLANET);
+			fleet.planetOneContainer = destination;
+			fleet.missionInTransit = true;
+			fleet.setTargetPlanet (destination);
+		}
+	}
+
 	public static void HandleMoveToPlanetMission(int stage, Fleets fleet){
 		if (stage == 2) {
 			Debug.Log ("Successfully moved to " + fleet.planetOneContainer.name);
@@ -91,7 +111,6 @@ public static class Missions  {
                 //TODO
                 //unload the stuff
                 fleet.missionInTransit = false;
-                fleet.unsetTargetPlanet();
                 fleet.MissionUnloadItem();
                 break;
             case 5: //All done!
