@@ -17,6 +17,7 @@ public class Fleets : NetworkBehaviour {
 
     //tbh this will likely become a ship class rather than fleets.  
 
+	public GameObject CenterOfGravity;
 
     //MISSION, EXPERIMENTAL [it work nigga]
     void intializeMissionVariables()
@@ -119,8 +120,7 @@ public class Fleets : NetworkBehaviour {
     public void endMission()
     {
 		TargetPosition = position;
-		orbiting = true;
-		fleetGo.transform.SetParent(targetPlanet.GravityWell.transform);
+		Orbit (this, targetPlanet.GravityWell.transform);
         //null our all of the containers and stuff TODO
         missionStage = 0;
         AssignedMission = Missions.MissionType.NONE;
@@ -130,7 +130,25 @@ public class Fleets : NetworkBehaviour {
 		missionInTransit = false;
     }
 
+	public static void Orbit(Fleets fleet, Transform transform){
+		fleet.orbiting = true;
+		fleet.fleetGo.transform.SetParent (transform);
+	}
 
+	public static void DeOrbit(Fleets fleet, Transform transform){
+		fleet.orbiting = false;
+		fleet.fleetGo.transform.SetParent (null);
+	}
+
+	public void Orbit(Transform transform){
+		orbiting = true;
+		fleetGo.transform.SetParent (transform);
+	}
+
+	public void DeOrbit(){
+		orbiting = false;
+		fleetGo.transform.SetParent (null);
+	}
 
     //This where we put the actual ships stats and components 
     //name of the ship, fluff
@@ -177,6 +195,21 @@ public class Fleets : NetworkBehaviour {
 
 	bool setGlow;
 	bool orbiting = false;
+	public bool Orbiting { 
+		get { return orbiting; } 
+		set {
+			bool atPlanet = false;
+			foreach (Planets planet in Planets.PlanetList) {
+				if (planet.GravityWell.GetComponent<Collider> ().bounds.Contains (position)) {
+					Orbit (planet.GravityWell.transform);
+					atPlanet = true;
+				}
+				if (!atPlanet) {
+					Orbit (CenterOfGravity.transform);
+				}
+			} 
+		}
+	}
 
 	public bool SetGlow { //enable or disable the glow effect 
 		get {
@@ -225,40 +258,52 @@ public class Fleets : NetworkBehaviour {
 
 
 	public  void processMovement(){
-
-		if (targetPosition != null && targetPosition != position && !((Vector3.Distance(targetPosition,position) < 10) && angularThrustEfficiency < .95)&& !((Vector3.Distance(targetPosition,position) < 20) && angularThrustEfficiency < .85)&& !((Vector3.Distance(targetPosition,position) < 30) && angularThrustEfficiency < .75)) {
+		float angularThrustFactor = 10000;
+		if (targetPosition != null && targetPosition != position) {
 			//Change effective movement speed based on angle to target.
-			if (angularThrustEfficiency >= .92) {
-				position = Vector3.MoveTowards (position, targetPosition + fleetGo.transform.up*(1-angularThrustEfficiency), movementSpeed * Time.deltaTime*angularThrustEfficiency);
-
+		
+			/*if (angularThrustEfficiency >= .92) {
+				angularThrustFactor = 1;
 			}
 			if (angularThrustEfficiency >= .84 && angularThrustEfficiency < .92) {
-				position = Vector3.MoveTowards (position, targetPosition + fleetGo.transform.up*(3-angularThrustEfficiency), movementSpeed * Time.deltaTime*angularThrustEfficiency);
+				angularThrustFactor = 15;
 
 			}
 			if (angularThrustEfficiency >= .78 && angularThrustEfficiency < .84) {
-				position = Vector3.MoveTowards (position, targetPosition + fleetGo.transform.up*(5-angularThrustEfficiency), movementSpeed * Time.deltaTime*angularThrustEfficiency);
+				angularThrustFactor = 20;
 
 			}
+			if (angularThrustEfficiency >= .78) {
+				angularThrustFactor = 100 * (1 - angularThrustEfficiency);
+			}
 			if (angularThrustEfficiency >= .72 && angularThrustEfficiency < .78) {
-				position = Vector3.MoveTowards (position, targetPosition + fleetGo.transform.up*(8-angularThrustEfficiency), movementSpeed * Time.deltaTime*angularThrustEfficiency);
+				angularThrustFactor = 100 * (1 - angularThrustEfficiency) + 20;
+
+			} */
+			if (angularThrustEfficiency >= .72) {
+				angularThrustFactor = 100 * (1 - angularThrustEfficiency);
 
 			}
 			if (angularThrustEfficiency >= .64 && angularThrustEfficiency < .72) {
-				position = Vector3.MoveTowards (position, targetPosition + fleetGo.transform.up*(13-angularThrustEfficiency), movementSpeed * Time.deltaTime*angularThrustEfficiency);
+				angularThrustFactor = 250;
 
 			}
 			if (angularThrustEfficiency >= .58 && angularThrustEfficiency < .64) {
-				position = Vector3.MoveTowards (position, targetPosition + fleetGo.transform.up*(16-angularThrustEfficiency), movementSpeed * Time.deltaTime*angularThrustEfficiency);
+				angularThrustFactor = 1000;
 
 			}
 			if (angularThrustEfficiency >= .5 && angularThrustEfficiency < .6) {
-				position = Vector3.MoveTowards (position, targetPosition + fleetGo.transform.up*(18-angularThrustEfficiency), movementSpeed * Time.deltaTime*angularThrustEfficiency);
+				angularThrustFactor = 10000;
 
 			}
 			if (angularThrustEfficiency >= .4 && angularThrustEfficiency < .5) {
-				position = Vector3.MoveTowards (position, targetPosition + fleetGo.transform.up*(28-angularThrustEfficiency), movementSpeed * Time.deltaTime*angularThrustEfficiency);
+				angularThrustFactor = 10000;
+			}
+		//	position = Vector3.MoveTowards (position, targetPosition + fleetGo.transform.up*(angularThrustFactor-angularThrustEfficiency), movementSpeed * Time.deltaTime*angularThrustEfficiency);
+			position = Vector3.MoveTowards (position, targetPosition, movementSpeed *(1/angularThrustFactor) * Time.deltaTime*angularThrustEfficiency);
 
+			if (Vector3.Distance (TargetPosition, position) < this.movementSpeed*Time.deltaTime*angularThrustEfficiency) {
+				this.position = TargetPosition;
 			}
 			}
 
@@ -315,7 +360,7 @@ public class Fleets : NetworkBehaviour {
 		}
 		set {
 			orbiting = false;
-			fleetGo.transform.SetParent (null);
+			DeOrbit ();
 			targetPosition = value;
 			if (targetPosition != null) {
 				//Point at the target location to maximize angular thrust
@@ -392,6 +437,7 @@ public class Fleets : NetworkBehaviour {
 			Debug.Log ("Fatal GameObject load error");
 		}
 
+		CenterOfGravity = GameObject.FindWithTag ("SystemGravity");
 		SpritesGo = GameObject.FindGameObjectWithTag ("GameController");
 		sprites = SpritesGo.GetComponent<Sprites>();
 		fleetSprite = sprites.FleetSprite;
@@ -480,7 +526,14 @@ public class Fleets : NetworkBehaviour {
 			position = fleetGo.transform.position;
 			targetPosition = position;
 		}
-		fleetGo.transform.position = position;
+
+
+			fleetGo.transform.position = position;
+		
+		if (position == TargetPosition) {
+			Orbiting = true;
+		}
+
 
 		//Draw a waypoint line to current target location
 		if (position != targetPosition) {
