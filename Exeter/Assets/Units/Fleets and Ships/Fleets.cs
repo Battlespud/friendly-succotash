@@ -6,6 +6,25 @@ using UnityEngine.Networking;
 public class Fleets : NetworkBehaviour {
 
 
+
+	public const float mFuel = 20;
+	public float fuel = mFuel;
+	public float Fuel {
+		get {
+			return fuel; 
+		}
+		set {
+			fuel = value;
+			if (fuel <= 0) {
+				fuel = 0;
+				hasFuel = false;
+				endMission ();
+			}
+		}
+	}
+
+	bool hasFuel = true;
+
     /*All movement and actions are performed by fleets rather than individual ships.  Though a fleet can consist of a single ship of course.
 	Behaviors:
 
@@ -120,7 +139,10 @@ public class Fleets : NetworkBehaviour {
     public void endMission()
     {
 		TargetPosition = position;
-		Orbit (this, targetPlanet.GravityWell.transform);
+		if (targetPlanet != null) {
+			Orbit (this, targetPlanet.GravityWell.transform);
+		} else
+			Orbit (CenterOfGravity.transform);
         //null our all of the containers and stuff TODO
         missionStage = 0;
         AssignedMission = Missions.MissionType.NONE;
@@ -259,7 +281,7 @@ public class Fleets : NetworkBehaviour {
 
 	public  void processMovement(){
 		float angularThrustFactor = 10000;
-		if (targetPosition != null && targetPosition != position) {
+		if (targetPosition != null && targetPosition != position && hasFuel) {
 			//Change effective movement speed based on angle to target.
 		
 			/*if (angularThrustEfficiency >= .92) {
@@ -301,6 +323,8 @@ public class Fleets : NetworkBehaviour {
 			}
 		//	position = Vector3.MoveTowards (position, targetPosition + fleetGo.transform.up*(angularThrustFactor-angularThrustEfficiency), movementSpeed * Time.deltaTime*angularThrustEfficiency);
 			position = Vector3.MoveTowards (position, targetPosition, movementSpeed *(1/angularThrustFactor) * Time.deltaTime*angularThrustEfficiency);
+
+			Fuel -= 1*Time.deltaTime;
 
 			if (Vector3.Distance (TargetPosition, position) < this.movementSpeed*Time.deltaTime*angularThrustEfficiency) {
 				this.position = TargetPosition;
@@ -359,6 +383,10 @@ public class Fleets : NetworkBehaviour {
 			return targetPosition;
 		}
 		set {
+			if (!hasFuel) {
+				Debug.Log ("Out of fuel...");
+				return;
+			}
 			orbiting = false;
 			DeOrbit ();
 			targetPosition = value;

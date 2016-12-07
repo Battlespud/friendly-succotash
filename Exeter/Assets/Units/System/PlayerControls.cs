@@ -60,8 +60,10 @@ public class PlayerControls : NetworkBehaviour {
 	}
 	const KeyCode SelectPlanetKey = KeyCode.G;
 
-
-
+	bool Stop(){
+		return	Input.GetKeyDown (StopKey);
+	}
+	const KeyCode StopKey = KeyCode.Backspace;
 
 
 
@@ -226,6 +228,12 @@ public class PlayerControls : NetworkBehaviour {
 
 		if(Input.GetKeyDown(KeyCode.Semicolon)){
 			Missions.MoveToPlanetMission(selectedFleets.LastOrDefault(), selectedPlanets.LastOrDefault());
+		}
+
+		if (Stop ()) {
+			foreach (Fleets fl in selectedFleets) {
+				fl.endMission ();
+			}
 		}
 
         //Switch to perspective Camera
