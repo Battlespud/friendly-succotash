@@ -16,23 +16,8 @@ public class Planets : AstroBody {
 
     //Gravity well, used for determining what the planet carries with it, maybe for orbital mechanics later.
     public GameObject GravityWell;
-    public float gravityStrength;
+    public float gravityStrength; //TODO
 
-    //How Resources Work
-    //Need 1 list for each resource type, and 1 overall
-
-
-
-
-    //Refined fuel ready for use
-    public float FuelReserves; 
-
-    //import template from specific planet script
-
-
-	//fetch the gameobject that represents the planet and keep our position here up to date with its coordinates
-
-	GameObject planetGo;
 	public GameObject planetOrbitGo;
     public OrbitAlphaController planetOrbitAlphaController;
 	bool orbitSelected = false;
@@ -48,7 +33,7 @@ public class Planets : AstroBody {
     }
 
 	public void checkOrbitSelection(){
-		Debug.Log ( planetGo.name + " is selected!" + !orbitSelected);
+		Debug.Log ( BodyGo.name + " is selected!" + !orbitSelected);
 		switch (orbitSelected) {
 		case true:
 			unselectOrbit ();
@@ -59,34 +44,20 @@ public class Planets : AstroBody {
 		}
 	}
 
-	//we'll set this from the script relating to the specific planet, not here
-    //deprecated for now
-    /*
-	//Returns a string listing amount available of each resource
-	public string getResourceString(){ 
-		string resourceString = System.String.Empty; //initialize to empty
-		foreach (NaturalResources r in PlanetNaturalResourcesList) {
-			resourceString += r.type.ToString() +": " + r.amountAvailable + "; ";
-		}
-		return(resourceString);
-	}
-
-    */
-
 	void getAlphaController(){
-        planetOrbitAlphaController = planetGo.GetComponent<OrbitAlphaController>();
+        planetOrbitAlphaController = BodyGo.GetComponent<OrbitAlphaController>();
 	}
 
     void getGravityWell()
     {
-        GravityWell = planetGo.transform.FindChild("GravityWell").gameObject;
+        GravityWell = BodyGo.transform.FindChild("GravityWell").gameObject;
     }
 
 	// Use this for initialization
 	new void Start () {
-		planetGo = this.gameObject;
+		BodyType = AstroBodyType.PLANET;
 		BodyGo = this.gameObject;
-		position = planetGo.transform.position;
+		position = BodyGo.transform.position;
 		getAlphaController ();
         getGravityWell();
 	}
@@ -99,7 +70,7 @@ public class Planets : AstroBody {
     // Update is called once per frame
 	new void Update () {
 		base.Update ();
-		position = planetGo.transform.position;
+		position = BodyGo.transform.position;
 	}
 
     public Vector3 GetPlanetPosition()

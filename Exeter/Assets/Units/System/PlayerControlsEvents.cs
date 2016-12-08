@@ -154,6 +154,7 @@ public static class PlayerControlsEvents  {
 			}
 			Debug.Log(targ.name);
 			Planets hitPlanet = targ.GetComponent<Planets> ();
+			Colonies.FoundColony (targ.GetComponent<AstroBody>());  //TODO Remove this later
 			hitPlanet.checkOrbitSelection ();
 			if(selectedPlanets.Contains(hitPlanet))
 			{

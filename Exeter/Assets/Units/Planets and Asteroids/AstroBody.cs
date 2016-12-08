@@ -6,8 +6,14 @@ public class AstroBody : MonoBehaviour {
 
 	//parent class for all planets, asteroids etc.  This is what allows for colonies
 
+
+
+
 	//this gameobject
 	public GameObject BodyGo;
+
+	//All the colonies here
+	public List<Colonies> ColoniesPresentList;
 
 	//default atmosphere, update in the specific classes
 	Atmospheres Atmosphere;
@@ -35,7 +41,7 @@ public class AstroBody : MonoBehaviour {
 	void MineResources()
 	{
 		//TODO, just a placeholder for now
-
+	//	Debug.Log("I should spam the console if astrobody is virtualized properly");
 	}
 
 	// Use this for initialization
