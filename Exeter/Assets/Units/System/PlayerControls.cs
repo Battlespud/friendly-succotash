@@ -44,7 +44,7 @@ public class PlayerControls : NetworkBehaviour {
 
 	const KeyCode SpeedUp = KeyCode.Equals;
 	const KeyCode SlowDown = KeyCode.Minus;
-	const KeyCode Pause = KeyCode.Pause;
+	const KeyCode Pause = KeyCode.Space;
 
 
 	bool SpawnFleet()
@@ -137,6 +137,9 @@ public class PlayerControls : NetworkBehaviour {
 		fetchComponents ();
 		PlayerControlsEvents.CheckFleetSprites (cam, FleetsList);
 		PlayerControlsEvents.ZoomOutMax (cam);
+		//Check our sprites three times a second and update as neccessary
+		InvokeRepeating ("InvokeSpriteCheck", 1, .33f);
+
 		}
 
     //sets up all of our variables
@@ -324,11 +327,9 @@ public class PlayerControls : NetworkBehaviour {
 
 		PlayerControlsEvents.MoveCamera (cam, diff);
 		lastFramePosition = currFramePosition;
-		//updates our sprites once per second
-		InvokeRepeating ("InvokeSpriteCheck", 1, 1);
 	} //end of update
 
-
+	//checks our sprites
 	void InvokeSpriteCheck(){
 		PlayerControlsEvents.CheckFleetSprites (cam, FleetsList);
 	}
