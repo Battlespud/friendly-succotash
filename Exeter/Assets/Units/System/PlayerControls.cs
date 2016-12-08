@@ -79,7 +79,9 @@ public class PlayerControls : NetworkBehaviour {
 	}
 	const KeyCode MoveKey = KeyCode.V;
 
-
+	bool Scroll(){
+		return (Input.GetAxis ("Mouse ScrollWheel") != 0f); 
+	}
 
 
 
@@ -241,7 +243,7 @@ public class PlayerControls : NetworkBehaviour {
 
 
 		//Handle Camera Zooming via scroll wheel
-		if( Input.GetAxis ("Mouse ScrollWheel") != 0f ) {
+		if(Scroll()) {
 			PlayerControlsEvents.Zoom(cam, diff);
 		} 
 
@@ -266,7 +268,7 @@ public class PlayerControls : NetworkBehaviour {
 			}
 		}
 
-        //Switch to perspective Camera
+        //Switch to perspective Camera. Default
         if (Input.GetKeyDown(KeyCode.P)) { 
 			LastCamTransform = cam.transform;
 			cam.orthographic = false;
