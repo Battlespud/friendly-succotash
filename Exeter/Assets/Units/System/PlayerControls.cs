@@ -287,7 +287,7 @@ public class PlayerControls : NetworkBehaviour {
 		}
 
         //on left mouse button click + V key, movement
-        if (Input.GetMouseButtonDown (0) && Move) {
+		if (Input.GetMouseButtonDown (0) && Move()) {
             bool abort = false;
             foreach(Planets planet in Planets.PlanetList)
             {
@@ -330,7 +330,6 @@ public class PlayerControls : NetworkBehaviour {
 
 
 	void InvokeSpriteCheck(){
-		Debug.Log ("If im going off more than once per second unity is retarded");
 		PlayerControlsEvents.CheckFleetSprites (cam, FleetsList);
 	}
 

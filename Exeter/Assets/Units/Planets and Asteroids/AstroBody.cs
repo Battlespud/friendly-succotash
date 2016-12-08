@@ -34,7 +34,6 @@ public class AstroBody : MonoBehaviour {
 
 	void MineResources()
 	{
-		Debug.Log ("Yeah it is");
 		//TODO, just a placeholder for now
 
 	}

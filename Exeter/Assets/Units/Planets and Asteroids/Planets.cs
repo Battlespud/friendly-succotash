@@ -83,7 +83,7 @@ public class Planets : AstroBody {
     }
 
 	// Use this for initialization
-	void Start () {
+	new void Start () {
 		planetGo = this.gameObject;
 		BodyGo = this.gameObject;
 		position = planetGo.transform.position;
@@ -97,7 +97,7 @@ public class Planets : AstroBody {
     }
 
     // Update is called once per frame
-    void Update () {
+	new void Update () {
 		base.Update ();
 		position = planetGo.transform.position;
 	}

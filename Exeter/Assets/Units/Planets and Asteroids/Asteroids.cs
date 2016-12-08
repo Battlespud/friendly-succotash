@@ -5,14 +5,14 @@ using UnityEngine;
 public class Asteroids : AstroBody {
 
 	// Use this for initialization
-	void Start () {
+	new void Start () {
 		BodyType = AstroBodyType.ASTEROID;
 		BodyGo = this.gameObject;
 		Name = BodyGo.name;
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
+	new void Update () {
 		base.Update ();
 		position = BodyGo.transform.position;
 	}
