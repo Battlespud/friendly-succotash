@@ -140,6 +140,7 @@
      <Compile Include="Assets\Space Graphics Toolkit\Scripts\Player\SgtThrusterVisibility.cs" />
      <Compile Include="Assets\Space Graphics Toolkit\Scripts\Player\SgtWrappedStarfield.cs" />
      <Compile Include="Assets\Units\Characters\Characters.cs" />
+     <Compile Include="Assets\Units\Economy\Colonies.cs" />
      <Compile Include="Assets\Units\Economy\Facilities\ArmyAcademy.cs" />
      <Compile Include="Assets\Units\Economy\Facilities\Facilities.cs" />
      <Compile Include="Assets\Units\Economy\Facilities\FleetAcademy.cs" />
@@ -156,6 +157,9 @@
      <Compile Include="Assets\Units\Fleets and Ships\Ships.cs" />
      <Compile Include="Assets\Units\Graphics\Space Engieners Test\RawMaterials.cs" />
      <Compile Include="Assets\Units\Graphics\Sprites.cs" />
+     <Compile Include="Assets\Units\Planets and Asteroids\Asteroids.cs" />
+     <Compile Include="Assets\Units\Planets and Asteroids\AstroBody Components\Atmospheres.cs" />
+     <Compile Include="Assets\Units\Planets and Asteroids\AstroBody.cs" />
      <Compile Include="Assets\Units\Planets and Asteroids\OrbitAlphaController.cs" />
      <Compile Include="Assets\Units\Planets and Asteroids\Planets.cs" />
      <Compile Include="Assets\Units\Planets and Asteroids\ResourceTemplates\SampleResourceTemplate.cs" />
@@ -168,6 +172,7 @@
      <Compile Include="Assets\Units\System\PlayerControlsEvents.cs" />
      <Compile Include="Assets\Units\System\TimeController.cs" />
      <Compile Include="Assets\Units\UI\CharacterMenuManager.cs" />
+     <Compile Include="Assets\Units\UI\Player.cs" />
      <Compile Include="Assets\Units\UI\timeDilationUI.cs" />
      <Compile Include="Assets\Units\UI\zoomToActiveFleet.cs" />
      <None Include="Assets\Space Graphics Toolkit\Examples\Basic Pack\Shaders\SgtTerrainDebug.shader" />

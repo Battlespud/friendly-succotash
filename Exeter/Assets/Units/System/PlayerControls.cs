@@ -7,7 +7,6 @@ using System;
 
 public class PlayerControls : NetworkBehaviour {
 
-	public Vector3 lastFramePosition;
 
 	//KEYBINDS
 
@@ -65,7 +64,10 @@ public class PlayerControls : NetworkBehaviour {
 	}
 	const KeyCode StopKey = KeyCode.Backspace;
 
-
+	bool Move(){
+		return	Input.GetKey (MoveKey);
+	}
+	const KeyCode MoveKey = KeyCode.V;
 
 	//use for locking regular controls while in menus
 	bool controlsDisabled = false;
@@ -79,10 +81,12 @@ public class PlayerControls : NetworkBehaviour {
 	}
 
 
-
+	//A list of various static lists.  Probably deprecated idk
 	Lists lists;
+	//The timecontroller shared by all players
 	TimeController timeController;
 
+	//This player's camera
 	public Camera cam;
 
     //The fleet list from the ListsController object
@@ -120,7 +124,7 @@ public class PlayerControls : NetworkBehaviour {
 			this.z = z;
 		}
 			}
-
+	//Records current camera rotation to a euler angles 
 	void recordEuler(eulerAngles euler){
 		euler.x = cam.transform.rotation.eulerAngles.x;
 		euler.y = cam.transform.rotation.eulerAngles.y;
@@ -153,6 +157,12 @@ public class PlayerControls : NetworkBehaviour {
 
     //Decide whether to enable/disable sprites on each fleet based on camera zoom
 
+	//Where the mouse was last frame, used for telling difference between this and last frame
+	public Vector3 lastFramePosition;
+
+
+
+
 	// Update is called once per frame
 	void Update () {
 
@@ -160,11 +170,9 @@ public class PlayerControls : NetworkBehaviour {
 		if (!isLocalPlayer || controlsDisabled) {
 			return;
 		}
-
-
-
-		Vector3 currFramePosition = new Vector3();
-		currFramePosition = PlayerControlsEvents.GetFramePosition (cam);
+		//record our current frame position
+		Vector3 currFramePosition = PlayerControlsEvents.GetFramePosition (cam);
+	
 
 
 		//set current frame positions
@@ -258,7 +266,7 @@ public class PlayerControls : NetworkBehaviour {
 		}
 
         //on left mouse button click, selection
-		if (Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.V)) { 
+		if (Input.GetMouseButtonDown(0) && !Move()) { 
 			//Debug.Log("Attempting selection!");
 			//dumb way without raycasts
 				foreach (Fleets fleet in FleetsList) {
@@ -279,7 +287,7 @@ public class PlayerControls : NetworkBehaviour {
 		}
 
         //on left mouse button click + V key, movement
-        if (Input.GetMouseButtonDown (0) && Input.GetKey(KeyCode.V)) {
+        if (Input.GetMouseButtonDown (0) && Move) {
             bool abort = false;
             foreach(Planets planet in Planets.PlanetList)
             {
@@ -316,12 +324,13 @@ public class PlayerControls : NetworkBehaviour {
 
 		PlayerControlsEvents.MoveCamera (cam, diff);
 		lastFramePosition = currFramePosition;
-		//updates our sprites as neccessary
+		//updates our sprites once per second
 		InvokeRepeating ("InvokeSpriteCheck", 1, 1);
 	} //end of update
 
 
 	void InvokeSpriteCheck(){
+		Debug.Log ("If im going off more than once per second unity is retarded");
 		PlayerControlsEvents.CheckFleetSprites (cam, FleetsList);
 	}
 
