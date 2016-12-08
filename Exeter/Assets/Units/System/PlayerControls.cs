@@ -10,8 +10,10 @@ public class PlayerControls : NetworkBehaviour {
 
 	//KEYBINDS
 
+
+//Mouse buttons.  Take note of which ones are get mouse button, and which are getmousebutton down
 	bool LeftClick(){
-		return Input.GetMouseButton (0);
+		return Input.GetMouseButtonDown (0);
 	}
 
 	bool RightClick(){
@@ -22,7 +24,7 @@ public class PlayerControls : NetworkBehaviour {
 		return Input.GetMouseButton (2);
 	}
 
-		//wasd
+//WASD Scrolling
 	const KeyCode Up =  KeyCode.W;
 	const KeyCode Down = KeyCode.S;
 	const KeyCode Left = KeyCode.A;
@@ -41,12 +43,12 @@ public class PlayerControls : NetworkBehaviour {
 		return Input.GetKey (Right);
 	}
 
-
+//Time Controls
 	const KeyCode SpeedUp = KeyCode.Equals;
 	const KeyCode SlowDown = KeyCode.Minus;
 	const KeyCode Pause = KeyCode.Space;
 
-
+//Keybinds for various actions, plus methods
 	bool SpawnFleet()
 	{
 		return Input.GetKeyDown(SpawnFleetKey);
@@ -59,6 +61,14 @@ public class PlayerControls : NetworkBehaviour {
 	}
 	const KeyCode SelectPlanetKey = KeyCode.G;
 
+	bool SelectFleet(){
+		return (LeftClick () && !Move ());
+	}
+
+	bool MoveFleet(){
+		return(LeftClick() && Move ());
+	}
+
 	bool Stop(){
 		return	Input.GetKeyDown (StopKey);
 	}
@@ -69,7 +79,12 @@ public class PlayerControls : NetworkBehaviour {
 	}
 	const KeyCode MoveKey = KeyCode.V;
 
-	//use for locking regular controls while in menus
+
+
+
+
+
+//use for locking regular controls while in menus
 	bool controlsDisabled = false;
 
 	public void disableControls(){
@@ -81,17 +96,16 @@ public class PlayerControls : NetworkBehaviour {
 	}
 
 
-	//A list of various static lists.  Probably deprecated idk
-	Lists lists;
 	//The timecontroller shared by all players
 	TimeController timeController;
 
 	//This player's camera
 	public Camera cam;
 
+	//A list of various static lists.  Probably deprecated idk
+	Lists lists;
     //The fleet list from the ListsController object
 	List<Fleets> FleetsList;
-
     //All currently selected fleets
 	public List<Fleets> selectedFleets;
 	//All currently highlighted planets
@@ -101,7 +115,7 @@ public class PlayerControls : NetworkBehaviour {
 
     //Our class used to store all the sprites we'll use
     Sprites sprites;
-
+	//Multiplayer stuff
 	NetworkPlayer netPlay;
 
 
@@ -113,6 +127,7 @@ public class PlayerControls : NetworkBehaviour {
 
 	Transform LastCamTransform;
 
+	//custom struct for holding rotations without dealing with quaternions
 	struct eulerAngles{
 		public float x;
 		public float y;
@@ -137,7 +152,7 @@ public class PlayerControls : NetworkBehaviour {
 		fetchComponents ();
 		PlayerControlsEvents.CheckFleetSprites (cam, FleetsList);
 		PlayerControlsEvents.ZoomOutMax (cam);
-		//Check our sprites three times a second and update as neccessary
+		//Check our sprites three times a second and update as neccessary.  Will run constantly after start
 		InvokeRepeating ("InvokeSpriteCheck", 1, .33f);
 
 		}
@@ -186,19 +201,15 @@ public class PlayerControls : NetworkBehaviour {
 		//record our current frame position
 		Vector3 currFramePosition = PlayerControlsEvents.GetFramePosition (cam);
 
-
 		Vector3 diff = new Vector3(0,0,0);  //storage container for the difference between where we were and where we moved the mouse to.
-		diff = new Vector3(0,0,0);
 
 		// Handle screen dragging
 		if(RightClick()) {	// Right
 			PlayerControlsEvents.Dragging(cam, lastFramePosition,currFramePosition);
 		}
 
-		diff = new Vector3 (0, 0, 0);
 
-		//WASD Scrolling
-		//TODO add zoom ratio speed effect
+		//WASD Scrolling, hold shift to go fast
 		if (GoUp()) {
 			diff.y += wasdScrollSpeed*forwards*shift();
 			PlayerControlsEvents.MoveCamera (cam, diff);
@@ -222,7 +233,6 @@ public class PlayerControls : NetworkBehaviour {
 
 		if(MiddleClick()) {	// Middle Click
 			if (!cam.orthographic) {
-					//determine difference in each vector component
 					diff = lastFramePosition - currFramePosition; 
 					PlayerControlsEvents.RotateCamera (cam, diff);
 				}
@@ -264,7 +274,7 @@ public class PlayerControls : NetworkBehaviour {
 			cam.transform.position.Set (LastCamTransform.position.x, LastCamTransform.position.y, z);
 		}
 
-		//Switch to Orthographic Camera
+		//Switch to Orthographic Camera. Not supported
 		if (Input.GetKeyDown(KeyCode.O)) { 
 			LastCamTransform = cam.transform;
 			cam.orthographic = true;
@@ -278,41 +288,13 @@ public class PlayerControls : NetworkBehaviour {
 		}
 
         //on left mouse button click, selection
-		if (Input.GetMouseButtonDown(0) && !Move()) { 
-			//Debug.Log("Attempting selection!");
-				foreach (Fleets fleet in FleetsList) {
-					if (fleet.localPlayerAuthority) {
-						Collider coll = fleet.fleetGo.GetComponent<Collider> ();
-						if (coll.bounds.Contains (new Vector3 (currFramePosition.x, currFramePosition.y, coll.transform.position.z))) {
-							changeSelection (fleet);
-						} else {
-						}
-					} else {
-				//		Debug.Log ("currently parsed fleet isnt owned by player, skipping");
-					}
-				}
-
-
+		if (SelectFleet()) { 
+			PlayerControlsEvents.SelectFleet(FleetsList, currFramePosition, selectedFleets);
 		}
 
-        //on left mouse button click + V key, movement
-		if (Input.GetMouseButtonDown (0) && Move()) {
-            bool abort = false;
-            foreach(Planets planet in Planets.PlanetList)
-            {
-				if (planet.gameObject.GetComponent<Collider>().bounds.Contains(currFramePosition) || planet.GravityWell.gameObject.GetComponent<Collider>().bounds.Contains(currFramePosition))
-                {
-					Missions.MoveToPlanetMission (selectedFleets, planet);
-                    //abort = true;
-                }
-            }
-            if (abort)
-            {
-                return;
-            }
-			foreach (Fleets fleet in selectedFleets) {
-				fleet.MoveTo(currFramePosition);
-			}
+        //on left mouse button click + V key, moveto
+		if (MoveFleet()) {
+			PlayerControlsEvents.MoveFleet (selectedFleets, currFramePosition);
 		}
 
 
@@ -339,18 +321,7 @@ public class PlayerControls : NetworkBehaviour {
 		PlayerControlsEvents.CheckFleetSprites (cam, FleetsList);
 	}
 
-	void changeSelection(Fleets fleet){
-		if(selectedFleets.Contains(fleet)){
-			selectedFleets.Remove(fleet);
-			fleet.SetGlow = false;
-			Debug.Log ("Unselected fleet: " + fleet.fleetName);
-			}
-			else{
-				selectedFleets.Add(fleet);
-			fleet.SetGlow = true;
-			Debug.Log ("Selected fleet: " + fleet.fleetName);
-			}
-	}
+
 
 
 

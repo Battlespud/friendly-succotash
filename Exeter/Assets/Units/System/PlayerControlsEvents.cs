@@ -166,6 +166,52 @@ public static class PlayerControlsEvents  {
 		}
 	}
 
+	public static void SelectFleet(List<Fleets> FleetsList, Vector3 currFramePosition, List<Fleets> selectedFleets){
+		foreach (Fleets fleet in FleetsList) {
+			if (fleet.localPlayerAuthority) {
+				Collider coll = fleet.fleetGo.GetComponent<Collider> ();
+				if (coll.bounds.Contains (new Vector3 (currFramePosition.x, currFramePosition.y, coll.transform.position.z))) {
+					changeSelection (fleet, selectedFleets);
+				} else {
+				}
+			} else {
+				//		Debug.Log ("currently parsed fleet isnt owned by player, skipping");
+			}
+		}
+	}
+
+	public static void changeSelection(Fleets fleet, List<Fleets> selectedFleets){
+		if(selectedFleets.Contains(fleet)){
+			selectedFleets.Remove(fleet);
+			fleet.SetGlow = false;
+			Debug.Log ("Unselected fleet: " + fleet.fleetName);
+		}
+		else{
+			selectedFleets.Add(fleet);
+			fleet.SetGlow = true;
+			Debug.Log ("Selected fleet: " + fleet.fleetName);
+		}
+	}
+
+	public static void MoveFleet(List<Fleets> selectedFleets, Vector3 currFramePosition){
+		bool abort = false;
+		foreach(Planets planet in Planets.PlanetList)
+		{
+			if (planet.gameObject.GetComponent<Collider>().bounds.Contains(currFramePosition) || planet.GravityWell.gameObject.GetComponent<Collider>().bounds.Contains(currFramePosition))
+			{
+				Missions.MoveToPlanetMission (selectedFleets, planet);
+				//abort = true;
+			}
+		}
+		if (abort)
+		{
+			return;
+		}
+		foreach (Fleets fleet in selectedFleets) {
+			fleet.MoveTo(currFramePosition);
+		}
+	}
+
 
 	static Vector3 GetWorldPositionOnPlane(Camera cam) {
 		float z = 0;
