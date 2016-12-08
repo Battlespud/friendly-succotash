@@ -167,28 +167,32 @@ public class PlayerControls : NetworkBehaviour {
 	int shift(){
 		if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift))
 		{
-			return 3;
+			return 4;
 		}
 		return 1;
 	}
 
-	// Update is called once per frame
+
+
+	//________________________________________________________________________________________________________________
+
+
 	void Update () {
 
 		//Check if this is the correct player
-		if (!isLocalPlayer || controlsDisabled) {
+		if (!isLocalPlayer) {
 			return;
 		}
 		//record our current frame position
 		Vector3 currFramePosition = PlayerControlsEvents.GetFramePosition (cam);
-	
+
+
 		Vector3 diff = new Vector3(0,0,0);  //storage container for the difference between where we were and where we moved the mouse to.
 		diff = new Vector3(0,0,0);
 
 		// Handle screen dragging
 		if(RightClick()) {	// Right
-			diff = PlayerControlsEvents.Dragging(cam, lastFramePosition,currFramePosition);
-		//	PlayerControlsEvents.MoveCamera (cam, diff);
+			PlayerControlsEvents.Dragging(cam, lastFramePosition,currFramePosition);
 		}
 
 		diff = new Vector3 (0, 0, 0);
@@ -219,7 +223,7 @@ public class PlayerControls : NetworkBehaviour {
 		if(MiddleClick()) {	// Middle Click
 			if (!cam.orthographic) {
 					//determine difference in each vector component
-				//	diff = lastFramePosition - currFramePosition; 
+					diff = lastFramePosition - currFramePosition; 
 					PlayerControlsEvents.RotateCamera (cam, diff);
 				}
 			}
@@ -229,7 +233,6 @@ public class PlayerControls : NetworkBehaviour {
 		//Handle Camera Zooming via scroll wheel
 		if( Input.GetAxis ("Mouse ScrollWheel") != 0f ) {
 			PlayerControlsEvents.Zoom(cam, diff);
-
 		} 
 
 		//Spawn fleet for testing
@@ -277,15 +280,12 @@ public class PlayerControls : NetworkBehaviour {
         //on left mouse button click, selection
 		if (Input.GetMouseButtonDown(0) && !Move()) { 
 			//Debug.Log("Attempting selection!");
-			//dumb way without raycasts
 				foreach (Fleets fleet in FleetsList) {
-				//	Debug.Log ("Parsing Fleets");
 					if (fleet.localPlayerAuthority) {
 						Collider coll = fleet.fleetGo.GetComponent<Collider> ();
 						if (coll.bounds.Contains (new Vector3 (currFramePosition.x, currFramePosition.y, coll.transform.position.z))) {
 							changeSelection (fleet);
 						} else {
-							//Debug.Log (new Vector3 (currFramePosition.x, currFramePosition.y, coll.transform.position.z) + " does not match an owned fleet");
 						}
 					} else {
 				//		Debug.Log ("currently parsed fleet isnt owned by player, skipping");
@@ -331,7 +331,7 @@ public class PlayerControls : NetworkBehaviour {
 		}
 		//______________________________________________________________________
 
-		lastFramePosition = currFramePosition;
+		lastFramePosition = PlayerControlsEvents.GetFramePosition(cam);
 	} //end of update
 
 	//checks our sprites

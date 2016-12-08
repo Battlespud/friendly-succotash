@@ -184,10 +184,10 @@ public static class PlayerControlsEvents  {
 		return position;
 	}
 
-	public static Vector3 Dragging(Camera cam,Vector3 last, Vector3 curr){
+	public static void Dragging(Camera cam,Vector3 last, Vector3 curr){
 		Vector3 diff = last - curr; 
 		diff.z = 0; 
-		return diff;
+		cam.transform.Translate(diff);
 	}
 
 }
