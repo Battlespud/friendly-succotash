@@ -164,7 +164,13 @@ public class PlayerControls : NetworkBehaviour {
 	public Vector3 lastFramePosition;
 
 
-
+	int shift(){
+		if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift))
+		{
+			return 3;
+		}
+		return 1;
+	}
 
 	// Update is called once per frame
 	void Update () {
@@ -176,48 +182,48 @@ public class PlayerControls : NetworkBehaviour {
 		//record our current frame position
 		Vector3 currFramePosition = PlayerControlsEvents.GetFramePosition (cam);
 	
-
-
-		//set current frame positions
-		//poll where the mouse is at the start of each frame and store it
-		//be very careful changing this as it can break selection
 		Vector3 diff = new Vector3(0,0,0);  //storage container for the difference between where we were and where we moved the mouse to.
+		diff = new Vector3(0,0,0);
 
 		// Handle screen dragging
 		if(RightClick()) {	// Right
 			diff = PlayerControlsEvents.Dragging(cam, lastFramePosition,currFramePosition);
+		//	PlayerControlsEvents.MoveCamera (cam, diff);
 		}
+
+		diff = new Vector3 (0, 0, 0);
 
 		//WASD Scrolling
 		//TODO add zoom ratio speed effect
 		if (GoUp()) {
-			diff.y += wasdScrollSpeed*forwards;
+			diff.y += wasdScrollSpeed*forwards*shift();
+			PlayerControlsEvents.MoveCamera (cam, diff);
+
 		}		
 		if (GoLeft()) { 
-			diff.x += wasdScrollSpeed*backwards;
+			diff.x += wasdScrollSpeed*backwards*shift();
+			PlayerControlsEvents.MoveCamera (cam, diff);
+
 		}		
 		if (GoDown()) { 
-			diff.y += wasdScrollSpeed*backwards;
+			diff.y += wasdScrollSpeed*backwards*shift();
+			PlayerControlsEvents.MoveCamera (cam, diff);
+
 		}		
 		if (GoRight()) { 
-			diff.x += wasdScrollSpeed*forwards;
+			diff.x += wasdScrollSpeed*forwards*shift();
+			PlayerControlsEvents.MoveCamera (cam, diff);
 		}
 
 
 		if(MiddleClick()) {	// Middle Click
-			switch (cam.orthographic) {
-			case true:
-				//orthographic cam cant rotate
-				break;
-			case false:
-				{
+			if (!cam.orthographic) {
 					//determine difference in each vector component
-					diff = lastFramePosition - currFramePosition; 
+				//	diff = lastFramePosition - currFramePosition; 
 					PlayerControlsEvents.RotateCamera (cam, diff);
-					break;
 				}
 			}
-		}
+
 
 
 		//Handle Camera Zooming via scroll wheel
@@ -325,7 +331,6 @@ public class PlayerControls : NetworkBehaviour {
 		}
 		//______________________________________________________________________
 
-		PlayerControlsEvents.MoveCamera (cam, diff);
 		lastFramePosition = currFramePosition;
 	} //end of update
 
