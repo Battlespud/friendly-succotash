@@ -8,7 +8,7 @@ public class Asteroids : AstroBody {
 	new void Start () {
 		BodyType = AstroBodyType.ASTEROID;
 		BodyGo = this.gameObject;
-		Name = BodyGo.name;
+		base.Start ();
 	}
 
 	// Update is called once per frame

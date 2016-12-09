@@ -60,6 +60,7 @@ public class Planets : AstroBody {
 		position = BodyGo.transform.position;
 		getAlphaController ();
         getGravityWell();
+		base.Start ();
 	}
 
     private void Awake()

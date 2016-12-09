@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+
 public static class PlayerControlsEvents  {
 
 
@@ -163,6 +164,53 @@ public static class PlayerControlsEvents  {
 			else
 			{
 				selectedPlanets.Add(hitPlanet);
+			}
+		}
+	}
+
+	public static void FoundColony(Camera cam){
+		Ray ray;
+		RaycastHit hit;
+		ray = cam.ScreenPointToRay (Input.mousePosition);
+		if (Physics.Raycast (ray, out hit)) {
+			GameObject targ;
+			if (hit.collider.name != "GravityWell")
+			{
+				targ = hit.collider.gameObject;
+			}
+			else
+			{		//if we hit a gravity well, grab its parent planet
+				targ = hit.collider.gameObject.transform.parent.gameObject;
+			}
+			if (targ.GetComponent<Colonies> () == null) {
+				Colonies.FoundColony (targ.GetComponent<AstroBody> ());  //TODO Remove this later
+			} else {
+				Debug.Log ("Colony already present, aborting");
+				return;
+			}
+		}
+	}
+
+	public static void AddColonist(Camera cam){
+		Ray ray;
+		RaycastHit hit;
+		ray = cam.ScreenPointToRay (Input.mousePosition);
+		if (Physics.Raycast (ray, out hit)) {
+			GameObject targ;
+			if (hit.collider.name != "GravityWell")
+			{
+				targ = hit.collider.gameObject;
+			}
+			else
+			{
+				targ = hit.collider.gameObject.transform.parent.gameObject;
+			}
+			if (targ.GetComponent<Colonies> () != null) {
+				Colonies c = (targ.GetComponent<Colonies> ());  
+				c.AddRandomColonist ();
+			} else {
+				Debug.Log ("No Colony present, aborting");
+				return;
 			}
 		}
 	}

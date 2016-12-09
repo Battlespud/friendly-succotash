@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.Networking;
 using System;
 
+
 public class PlayerControls : NetworkBehaviour {
 
 
@@ -60,6 +61,17 @@ public class PlayerControls : NetworkBehaviour {
 		return		Input.GetKeyDown (SelectPlanetKey);
 	}
 	const KeyCode SelectPlanetKey = KeyCode.G;
+
+
+	bool FoundColony(){
+		return  	Input.GetKeyDown(FoundColonyKey);
+	}
+	const KeyCode FoundColonyKey = KeyCode.C;
+
+	bool AddColonist(){
+		return  	Input.GetKeyDown(AddColonistKey);
+	}
+	const KeyCode AddColonistKey = KeyCode.Z;
 
 	bool SelectFleet(){
 		return (LeftClick () && !Move ());
@@ -287,6 +299,14 @@ public class PlayerControls : NetworkBehaviour {
 		//Trigger planet selection to test orbit alpha
 		if (SelectPlanet()) { 
 			PlayerControlsEvents.SelectPlanet (cam, selectedPlanets);
+		}
+
+		if (FoundColony()) { 
+			PlayerControlsEvents.FoundColony (cam);
+		}
+
+		if (AddColonist()) { 
+			PlayerControlsEvents.AddColonist (cam);
 		}
 
         //on left mouse button click, selection

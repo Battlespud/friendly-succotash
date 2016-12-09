@@ -46,7 +46,7 @@ public class AstroBody : MonoBehaviour {
 
 	// Use this for initialization
 	virtual public void Start () {
-		
+		Name = BodyGo.name;
 	}
 	
 	// Update is called once per frame

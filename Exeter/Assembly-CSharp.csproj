@@ -148,6 +148,7 @@
      <Compile Include="Assets\Units\Economy\FacilityCosts.cs" />
      <Compile Include="Assets\Units\Economy\NaturalResources.cs" />
      <Compile Include="Assets\Units\Economy\NonShipEntity.cs" />
+     <Compile Include="Assets\Units\Economy\Pops\Jobs.cs" />
      <Compile Include="Assets\Units\Economy\Pops\POP.cs" />
      <Compile Include="Assets\Units\Fleets and Ships\Fleets.cs" />
      <Compile Include="Assets\Units\Fleets and Ships\MissionSystem\Missions.cs" />

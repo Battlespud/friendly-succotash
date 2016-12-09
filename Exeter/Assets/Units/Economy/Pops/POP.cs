@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class POP : NonShipEntity {
 
+
+	public static float ReproductionRate = .0033f;   //once per five min
+
     //1 unit of population.  Updating is handled by planet class via list, in ships they wont update (cryosleep or whatever)
 
     //99% of this is (not) fluff vital to fielding an army of muscular african mandingos
@@ -11,10 +14,11 @@ public class POP : NonShipEntity {
     public static int updateCycleTime = 60; //How often to update pops
 
 
-    public enum Ethnicity { White=0, Black, Asian, Cuck};
-    public static string[] EthnicityNames = new string[4] { "White", "Mandingo", "ChingChing", "Cuck" };
+    public enum Race { White=0, Black, Asian, Cuck};
+    public static string[] RaceNames = new string[4] { "White", "Mandingo", "ChingChing", "Cuck" };
     public enum Gender {Male, Female, Apache};
 
+	public Jobs Job;
     //Where this pop contributes their labor to
     public Facilities workAssignment;
     //prevents null ref when no workassignment set
@@ -29,9 +33,10 @@ public class POP : NonShipEntity {
     //Name,  Race, gender
     public string firstName;
     public string lastName;
+	public string Name{ get { return firstName + " " + lastName; } }
     public Gender gender;
-    public Ethnicity race;
-    public string ethnicityName;
+    public Race race;
+	public string raceName{ get { return RaceNames [(int)race]; } }
 
     //How much work this pop does
     public float laborOutput; //optimal at 1
@@ -44,4 +49,7 @@ public class POP : NonShipEntity {
     public bool toExecute = false;
     //send to concentration camp
     public bool toCamp = false;
+
+	public POP(){}
+
 }
