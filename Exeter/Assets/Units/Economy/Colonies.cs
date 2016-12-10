@@ -1,8 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
 
 public class Colonies : MonoBehaviour {
+
+	//TODO make a timer and whenever it elapses spawn a new thread to do mining calculations in, current system isnt compatible with our time control, so resource mining will always proceed at the same rate regardless
+
+	Thread MiningThread;
 
 	public static int ReproductionTimer = 300; //how often in seconds to pop growth
 	public static float ReproductionRate = .02f;
@@ -33,6 +38,10 @@ public class Colonies : MonoBehaviour {
 	public int[] ColonyMines;
 	public float FuelReserves; 
 
+	//just dont ask
+	MiningDelegate MiningDelegateObject;
+	MiningDelegate MiningDelegateObject2;
+
 
 	// Use this for initialization
 	void Start () {
@@ -43,8 +52,21 @@ public class Colonies : MonoBehaviour {
 		InvokeRepeating ("UpdateMineEff", 5, 5);
 		MinesList = new List<Mines>();
 		MinesList.Add (new Mines (NaturalResources.NaturalResourcesType.FUEL));
+	//	 setupThread(); //if we want to do the multithreaded version
+			InvokeRepeating ("Mining", 1, 1);  //default method, uses main thread for calculations, leave this one enabled for now
+	}
 
-		InvokeRepeating ("Mining", 1, 1);
+	System.Threading.Timer MiningTimer;
+	//continue not asking
+	void setupThread(){		
+		//this makes a timer that executes mining stuff every 1 second in its own thread, it works 100%
+		MiningTimer = new System.Threading.Timer (new TimerCallback(MiningCallback),null,1000,1000);
+		//this is a more complicated attempt at doing the same thing manually, doesnt really work so great
+		MiningDelegateObject = new MiningDelegate(Mining);
+		MiningDelegateObject2 = new MiningDelegate(Mining);
+		MiningThread = new Thread (new ThreadStart (MiningThreadHost));
+		MiningThread.Start ();
+	//	InvokeRepeating ("stayinAlive", 1, 20);
 	}
 
 
@@ -52,8 +74,48 @@ public class Colonies : MonoBehaviour {
 	void Update () {
 		}
 
+	//reference to keep the timer from getting garbage collected, should never actually be called i think
+	void stayinAlive(){
+		Debug.Log ("hey u up " + MiningTimer.GetType ().Name + "?");
+	}
+
+	//100% persisit in this not asking thing
+	delegate void MiningDelegate( object sender, System.Timers.ElapsedEventArgs e);
+	delegate void MiningDelegate2(object state);
+
+	//im so sorry
+	public void MiningThreadHost(){
+		Debug.Log ("Mining thread started..");
+	//	MiningTimer. = 1;
+	//	MiningTimer.AutoReset = true;
+	//	MiningTimer.Elapsed += new System.Timers.ElapsedEventHandler(MiningDelegateObject);
+		Debug.Log ("all done setting up thread timer");
+	}
+
 
 	//this is if we want to make mines generic and only process according to how many of each we have
+	//this overload is for multithreaded system.timers
+	void Mining(object sender, System.Timers.ElapsedEventArgs e){
+		int i = 0;
+		while (i < NaturalResources.numberOfResources) {
+			if (Minerals.ResourcesRemaining [i] > 0) {
+				float amountMined = miningFormula (i);
+			}
+			i++;
+		}
+	}
+	//for threading.timers use
+	void MiningCallback(object sender ){
+		int i = 0;
+		while (i < NaturalResources.numberOfResources) {
+			if (Minerals.ResourcesRemaining [i] > 0) {
+				float amountMined = miningFormula (i);
+			}
+			i++;
+		}
+	}
+
+// Default version
 	void Mining(){
 		int i = 0;
 		while (i < NaturalResources.numberOfResources) {
