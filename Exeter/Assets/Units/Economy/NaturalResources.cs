@@ -9,29 +9,30 @@ public class NaturalResources : NonShipEntity {
     //Arrays start at 0, so try to remember to keep the indices organized as such
 
 
-
-
+	//how fast things mine, later we'll move this over to individual mines
+	public const int MiningRate = 10;
 
     //TODO
     //set mass and volume per unit and rebalance once cargo components are designed
 
     //set this equal to the number of enum coices
-    const int numberOfResources = 2;
+    public const int numberOfResources = 2;
     //enum holds the values (ie, the array locations) for each resource.
 	public enum NaturalResourcesType{ FUEL = 0, STEEL = 1}; //TODO add more later
 
     //whats still in the ground
-    public float[] ResourcesRemaining = new float[numberOfResources];
+	public float[] ResourcesRemaining = new float[numberOfResources]{100,100};
     //%access effieciency
-    public float[] Availability = new float[numberOfResources];
+	public float[] Availability = new float[numberOfResources]{1,1};
     //usable resources
-    public float[] ResourcesMined = new float[numberOfResources];
+	public float[] ResourcesMined = new float[numberOfResources]{0,0};
 
 
-    public NaturalResources(float[] remaining, float[] availability)
+	public NaturalResources(float[] remaining, float[] availability, float[] mined)
     {
         ResourcesRemaining = remaining;
         Availability = availability;
+		ResourcesMined = mined;
     }
 
 

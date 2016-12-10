@@ -183,7 +183,6 @@ public static class PlayerControlsEvents  {
 				targ = hit.collider.gameObject.transform.parent.gameObject;
 			}
 			if (targ.GetComponent<Colonies> () == null) {
-				Colonies.FoundColony (targ.GetComponent<AstroBody> ());  //TODO Remove this later
 			} else {
 				Debug.Log ("Colony already present, aborting");
 				return;

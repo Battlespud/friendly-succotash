@@ -36,6 +36,7 @@ public class AstroBody : MonoBehaviour {
 	{
 		Resources = template;
 		Debug.Log("Resources on " + BodyGo.name + " have been initialized");
+		Debug.Log (Resources.ResourcesRemaining [0] + " " + Resources.ResourcesRemaining [1]);
 	}
 
 	void MineResources()
