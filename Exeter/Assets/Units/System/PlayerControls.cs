@@ -52,6 +52,8 @@ public class PlayerControls : NetworkBehaviour {
 	const KeyCode FoundColonyKey = KeyCode.C;
 	const KeyCode StopKey = KeyCode.Backspace;
 	const KeyCode MoveKey = KeyCode.V;
+	const KeyCode ZoomInKey = KeyCode.R;
+	const KeyCode ZoomOutKey = KeyCode.E;
 
 
 //Time Controls
@@ -99,8 +101,13 @@ public class PlayerControls : NetworkBehaviour {
 		return (Input.GetAxis ("Mouse ScrollWheel") != 0f); 
 	}
 
+	bool ZoomIn(){
+		return (Input.GetKey(ZoomInKey)); 
+	}
 
-
+	bool ZoomOut(){
+		return (Input.GetKey(ZoomOutKey)); 
+	}
 
 //use for locking regular controls while in menus
 	bool controlsDisabled = false;
@@ -258,10 +265,18 @@ public class PlayerControls : NetworkBehaviour {
 
 
 
-		//Handle Camera Zooming via scroll wheel
+		//Handle Camera Zooming 
 		if(Scroll()) {
 			PlayerControlsEvents.Zoom(cam, diff);
 		} 
+
+		if (ZoomOut ()) {
+			PlayerControlsEvents.Zoom (cam, -10f * (float)shift());
+		}
+
+		if (ZoomIn ()) {
+			PlayerControlsEvents.Zoom (cam, 10f * (float)shift());
+		}
 
 		//Spawn fleet for testing
 		if (SpawnFleet()) { 

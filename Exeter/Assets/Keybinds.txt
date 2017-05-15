@@ -2,6 +2,8 @@
 Navigation:
 	Select: Left Click
 	Scrolling: WASD
+	Zoom Out: E
+	Zoom In : R
 
 Debug Actions:
 	Spawn Fleet at Cursor: F

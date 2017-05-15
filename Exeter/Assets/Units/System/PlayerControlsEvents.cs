@@ -70,6 +70,23 @@ public static class PlayerControlsEvents  {
 		}
 	}
 
+	public static void Zoom(Camera cam, float diff){
+		switch (cam.orthographic) { //different camera modes handle zooming differently.  Perspective actually moves the camera, while ortho changes the canvas size to simulate it
+		case true:
+			{	
+				//unsupported
+				break;
+			}
+		case false:
+			{
+				if ((diff < 0 && cam.transform.position.z > perspZoomOutLimit * -1) || (diff > 0 && cam.transform.position.z < perspZoomInLimit * -1)) {
+					cam.transform.Translate (new Vector3(0f,0f, diff));
+				}
+				break;
+			}
+		}
+	}
+
 	public static void ZoomOutMax(Camera cam){
 		cam.orthographicSize = orthoZoomOutLimit;
 		cam.transform.position.Set(cam.transform.position.x,cam.transform.position.y,perspZoomOutLimit * -1);
