@@ -44,6 +44,16 @@ public class PlayerControls : NetworkBehaviour {
 		return Input.GetKey (Right);
 	}
 
+
+//Keybinds
+	const KeyCode SpawnFleetKey = KeyCode.F;
+	const KeyCode SelectPlanetKey = KeyCode.G;
+	const KeyCode AddColonistKey = KeyCode.Z;
+	const KeyCode FoundColonyKey = KeyCode.C;
+	const KeyCode StopKey = KeyCode.Backspace;
+	const KeyCode MoveKey = KeyCode.V;
+
+
 //Time Controls
 	const KeyCode SpeedUp = KeyCode.Equals;
 	const KeyCode SlowDown = KeyCode.Minus;
@@ -54,24 +64,20 @@ public class PlayerControls : NetworkBehaviour {
 	{
 		return Input.GetKeyDown(SpawnFleetKey);
 	}
-	const KeyCode SpawnFleetKey = KeyCode.F;
 
 
 	bool SelectPlanet(){
 		return		Input.GetKeyDown (SelectPlanetKey);
 	}
-	const KeyCode SelectPlanetKey = KeyCode.G;
 
 
 	bool FoundColony(){
 		return  	Input.GetKeyDown(FoundColonyKey);
 	}
-	const KeyCode FoundColonyKey = KeyCode.C;
 
 	bool AddColonist(){
 		return  	Input.GetKeyDown(AddColonistKey);
 	}
-	const KeyCode AddColonistKey = KeyCode.Z;
 
 	bool SelectFleet(){
 		return (LeftClick () && !Move ());
@@ -84,12 +90,10 @@ public class PlayerControls : NetworkBehaviour {
 	bool Stop(){
 		return	Input.GetKeyDown (StopKey);
 	}
-	const KeyCode StopKey = KeyCode.Backspace;
 
 	bool Move(){
 		return	Input.GetKey (MoveKey);
 	}
-	const KeyCode MoveKey = KeyCode.V;
 
 	bool Scroll(){
 		return (Input.GetAxis ("Mouse ScrollWheel") != 0f); 

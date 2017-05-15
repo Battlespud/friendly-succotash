@@ -113,6 +113,7 @@
      <None Include="Assets\Space Graphics Toolkit\Shaders\Resources\SgtCoronaOuter.shader" />
      <None Include="Assets\Space Graphics Toolkit\Shaders\Resources\SgtStaticStarfield.shader" />
      <None Include="Assets\Space Graphics Toolkit\Shaders\Resources\SgtLightning.shader" />
+     <None Include="Assets\Keybinds.txt" />
      <None Include="Assets\Space Graphics Toolkit\Shaders\Resources\SgtSkysphere.shader" />
      <None Include="Assets\Space Graphics Toolkit\Shaders\Resources\SgtJovian.shader" />
  <Reference Include="UnityEditor.Advertisements">

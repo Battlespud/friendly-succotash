@@ -1,0 +1,23 @@
+
+Navigation:
+	Select: Left Click
+	Scrolling: WASD
+
+Debug Actions:
+	Spawn Fleet at Cursor: F
+	Select Planet at Cursor: G
+	Add Colonist to Selected Planet: Z
+	Found Colony on Selected Planet: C
+
+Ship Commands:
+	Stop: Backspace
+	MoveTo: Left Click + V
+
+Camera Commands: 
+	Perspective Camera: P
+	Orthographic Camera: O (Legacy)
+
+Time Commands:
+	Speed Up: +
+	Slow Down: -
+	Pause: Space

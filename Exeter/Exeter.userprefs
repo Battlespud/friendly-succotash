@@ -1,13 +1,19 @@
 ﻿<Properties RefactoringSettings.EnableRefactorings="True" StartupItem="Assembly-CSharp.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Units\Planets and Asteroids\Asteroids.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Units\Fleets and Ships\MissionSystem\Missions.cs">
     <Files>
-      <File FileName="Assets\Units\Planets and Asteroids\AstroBody.cs" Line="49" Column="22" />
-      <File FileName="Assets\Units\Planets and Asteroids\Planets.cs" Line="63" Column="17" />
-      <File FileName="Assets\Units\Planets and Asteroids\Asteroids.cs" Line="11" Column="17" />
+      <File FileName="Assets\Units\Planets and Asteroids\AstroBody.cs" Line="1" Column="1" />
       <File FileName="Assets\Units\Economy\Colonies.cs" Line="1" Column="1" />
-      <File FileName="Assets\Units\System\PlayerControls.cs" Line="247" Column="47" />
-      <File FileName="Assets\Units\System\PlayerControlsEvents.cs" Line="12" Column="30" />
+      <File FileName="Assets\Units\Economy\NaturalResources.cs" Line="1" Column="1" />
+      <File FileName="Assets\Units\Planets and Asteroids\ResourceTemplates\SampleResourceTemplate.cs" Line="1" Column="1" />
+      <File FileName="Assets\Units\Economy\Facilities\Mines.cs" Line="1" Column="1" />
+      <File FileName="Assets\Units\Fleets and Ships\ShipDesign\Components.cs" Line="1" Column="1" />
+      <File FileName="Assets\Units\System\PlayerControls.cs" Line="1" Column="1" />
+      <File FileName="Assets\Units\Planets and Asteroids\Planets.cs" Line="1" Column="1" />
+      <File FileName="Assets\Units\Fleets and Ships\MissionSystem\ShipEvents.cs" Line="1" Column="1" />
+      <File FileName="Assets\Units\Fleets and Ships\Fleets.cs" Line="1" Column="1" />
+      <File FileName="Assets\Units\System\PlayerControlsEvents.cs" Line="28" Column="40" NotebookId="1" />
+      <File FileName="Assets\Units\Fleets and Ships\MissionSystem\Missions.cs" Line="1" Column="1" NotebookId="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
